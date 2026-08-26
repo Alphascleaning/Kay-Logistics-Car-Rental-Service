@@ -1,1 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contact KLCRS</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header>
+  <div class="logo">KLCRS</div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="fleet.html">Fleet</a>
+    <a href="booking.html">Booking</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="admin.html">Admin</a>
+  </nav>
+</header>
+
+<section class="section">
+  <h2>Contact Us</h2>
+  <p>If you have questions, need assistance, or want to make an inquiry, feel free to reach out to KLCRS using the details below.</p>
+
+  <div class="contact-info">
+    <p><strong>Address:</strong> 3 Peacock Farm, Wellington, Freetown, Sierra Leone</p>
+    <p><strong>Phone:</strong> +23276699658</p>
+    <p><strong>Email:</strong> alpha_kamara@hotmail.de</p>
+    <p><strong>Website:</strong> www.klcrs.de</p>
+  </div>
+</section>
+
+<section class="section">
+  <h2>Send Us a Message</h2>
+
+  <form id="contactForm">
+    <label>Your Name</label><br>
+    <input type="text" id="name" required><br><br>
+
+    <label>Your Email</label><br>
+    <input type="email" id="email" required><br><br>
+
+    <label>Your Message</label><br>
+    <textarea id="message" rows="5" required></textarea><br><br>
+
+    <button type="submit" class="btn-primary">Send Message</button>
+  </form>
+
+  <p id="contactStatus"></p>
+</section>
+
+<footer>
+  &copy; Kay Logistics Car Rental Service (KLCRS)
+</footer>
+
+<script src="js/firebase.js"></script>
+<script>
+  const form = document.getElementById('contactForm');
+  const statusEl = document.getElementById('contactStatus');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    statusEl.textContent = 'Sending message...';
+
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const message = document.getElementById('message').value;
+
+    try {
+      await window.firestore.collection('messages').add({
+        name,
+        email,
+        message,
+        createdAt: new Date()
+      });
+
+      statusEl.textContent = 'Message sent successfully. KLCRS will reply soon.';
+      form.reset();
+    } catch (err) {
+      console.error(err);
+      statusEl.textContent = 'Error sending message. Please try again.';
+    }
+  });
+</script>
+
+</body>
+</html>
 
