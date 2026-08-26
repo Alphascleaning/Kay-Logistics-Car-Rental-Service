@@ -1,1 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>KLCRS Admin Panel</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header>
+  <div class="logo">KLCRS</div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="fleet.html">Fleet</a>
+    <a href="booking.html">Booking</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="admin.html">Admin</a>
+  </nav>
+</header>
+
+<section class="section">
+  <h2>Admin Dashboard</h2>
+  <p>View all bookings and customer messages submitted through the KLCRS website.</p>
+</section>
+
+<section class="section">
+  <h2>Bookings</h2>
+  <table class="admin-table" id="bookingsTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Email</th>
+        <th>Vehicle</th>
+        <th>Area</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Total (€)</th>
+        <th>Driver</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</section>
+
+<section class="section">
+  <h2>Messages</h2>
+  <table class="admin-table" id="messagesTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Message</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</section>
+
+<footer>
+  &copy; Kay Logistics Car Rental Service (KLCRS)
+</footer>
+
+<script src="js/firebase.js"></script>
+<script>
+  // Load bookings
+  window.firestore.collection('bookings').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
+    const table = document.querySelector('#bookingsTable tbody');
+    table.innerHTML = '';
+
+    snapshot.forEach(doc => {
+      const b = doc.data();
+      const row = `
+        <tr>
+          <td>${b.name}</td>
+          <td>${b.phone}</td>
+          <td>${b.email}</td>
+          <td>${b.carId}</td>
+          <td>${b.area}</td>
+          <td>${b.startDate}</td>
+          <td>${b.endDate}</td>
+          <td>${b.totalPrice}</td>
+          <td>${b.renterProvidedDriver ? 'Own Driver' : 'KLCRS Driver'}</td>
+          <td>${b.status}</td>
+        </tr>
+      `;
+      table.innerHTML += row;
+    });
+  });
+
+  // Load messages
+  window.firestore.collection('messages').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
+    const table = document.querySelector('#messagesTable tbody');
+    table.innerHTML = '';
+
+    snapshot.forEach(doc => {
+      const m = doc.data();
+      const row = `
+        <tr>
+          <td>${m.name}</td>
+          <td>${m.email}</td>
+          <td>${m.message}</td>
+          <td>${m.createdAt.toDate().toLocaleString()}</td>
+        </tr>
+      `;
+      table.innerHTML += row;
+    });
+  });
+</script>
+
+</body>
+</html>
 
