@@ -74,9 +74,11 @@ header nav a:hover {
 /* Card Grid */
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2.5rem; /* increased spacing */
+  padding: 20px 10px;
 }
+
 
 .card {
   background: #fff;
