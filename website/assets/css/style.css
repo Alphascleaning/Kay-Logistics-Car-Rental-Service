@@ -215,4 +215,9 @@ footer {
 .card {
   position: relative;
 }
+.fleet-section {
+  background: #f8f9fa;
+  padding: 40px 20px;
+  border-radius: 10px;
+}
 
