@@ -141,6 +141,35 @@
     <a id="modalBookBtn" href="booking.html" class="btn-primary">Book this vehicle</a>
   </div>
 </div>
+  <script>
+function openModal(title, image, specs, description, pricing, fuel, gps) {
+  document.getElementById('modalTitle').innerText = title;
+  document.getElementById('modalImage').src = image;
+  document.getElementById('modalSpecs').innerText = specs;
+  document.getElementById('modalDescription').innerText = description;
+  document.getElementById('modalPricing').innerText = pricing;
+  document.getElementById('modalFuel').innerText = fuel;
+  document.getElementById('modalGPS').innerText = gps;
+
+  document.getElementById('vehicleModal').style.display = "block";
+}
+
+document.querySelector('.close').onclick = function() {
+  document.getElementById('vehicleModal').style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == document.getElementById('vehicleModal')) {
+    document.getElementById('vehicleModal').style.display = "none";
+  }
+}
+</script>
+
+<footer>
+    © Kay Logistics Car Rental Service (KLCRS)
+</footer>
+</body>
+</html>
 <footer>
   &copy; Kay Logistics Car Rental Service (KLCRS)
 </footer>
