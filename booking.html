@@ -28,9 +28,9 @@
   <div class="info-box fuel-box">
     <h3><i class="fa-solid fa-gas-pump"></i> Fuel Policy</h3>
     <p>
-      All KLCRS vehicles come with **reserve fuel** at the start of the rental.  
-      Fuel is **not included** in the rental price.  
-      The vehicle must be returned with the **same amount of reserve fuel** provided at pickup.
+      All KLCRS vehicles come with <strong>reserve fuel</strong> at the start of the rental.<br>
+      Fuel is <strong>not included</strong> in the rental price.<br>
+      The vehicle must be returned with the <strong>same amount of reserve fuel</strong> provided at pickup.
     </p>
   </div>
 
@@ -38,13 +38,14 @@
   <div class="info-box driver-box">
     <h3><i class="fa-solid fa-user-shield"></i> Driver Responsibility</h3>
     <p>
-      If you choose to provide **your own driver**, you accept **full responsibility** for any damages caused during the rental period.  
+      If you choose to provide <strong>your own driver</strong>, you accept <strong>full responsibility</strong> for any damages caused during the rental period.<br>
       KLCRS will not cover repair or maintenance costs resulting from renter‑provided drivers.
     </p>
   </div>
 
   <!-- Booking Form -->
-  <form class="booking-form">
+  <form class="booking-form" action="booking-confirmation.html">
+
     <label>Full Name</label>
     <input type="text" required>
 
@@ -55,12 +56,18 @@
     <input type="email" required>
 
     <label>Select Vehicle</label>
-    <select required>
+    <select name="vehicle" required>
       <option value="">Choose a vehicle</option>
       <option>Mercedes-Benz ML 320 (Petrol)</option>
       <option>Toyota Land Cruiser Prado (Diesel)</option>
       <option>Nissan X-Trail (Diesel)</option>
     </select>
+
+    <!-- Automatic Price Box -->
+    <div id="priceBox" class="info-box price-box">
+      <h3><i class="fa-solid fa-money-bill"></i> Price</h3>
+      <p>Select a vehicle to view pricing.</p>
+    </div>
 
     <label>Rental Start Date</label>
     <input type="date" required>
@@ -78,12 +85,41 @@
     </select>
 
     <button type="submit" class="btn-primary">Submit Booking</button>
+
+    <!-- WhatsApp Booking Button -->
+    <a href="https://wa.me/23276699658?text=Hello%20KLCRS,%20I%20would%20like%20to%20book%20a%20vehicle."
+       class="btn-whatsapp">
+       <i class="fa-brands fa-whatsapp"></i> Book via WhatsApp
+    </a>
+
   </form>
 </section>
 
 <footer>
   © Kay Logistics Car Rental Service (KLCRS)
 </footer>
+
+<!-- Automatic Price Calculation Script -->
+<script>
+const prices = {
+  "Mercedes-Benz ML 320 (Petrol)": { inland: 25, upland: 56 },
+  "Toyota Land Cruiser Prado (Diesel)": { inland: 25, upland: 56 },
+  "Nissan X-Trail (Diesel)": { inland: 25, upland: 56 }
+};
+
+document.querySelector("select[name='vehicle']").onchange = function() {
+  const vehicle = this.value;
+  if (prices[vehicle]) {
+    const inland = prices[vehicle].inland;
+    const upland = prices[vehicle].upland;
+
+    document.getElementById("priceBox").innerHTML =
+      `<h3><i class='fa-solid fa-money-bill'></i> Price</h3>
+       <p><strong>Inland:</strong> €${inland}/day<br>
+       <strong>Upland:</strong> €${upland}/day</p>`;
+  }
+};
+</script>
 
 </body>
 </html>
