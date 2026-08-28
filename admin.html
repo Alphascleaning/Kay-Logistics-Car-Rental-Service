@@ -35,7 +35,7 @@
         </tr>
       </thead>
       <tbody id="bookingData">
-        <!-- Future Firebase entries will appear here -->
+        <!-- Firebase entries will appear here -->
       </tbody>
     </table>
   </div>
@@ -44,7 +44,36 @@
 <footer>
   © Kay Logistics Car Rental Service (KLCRS)
 </footer>
+
+<!-- Firebase Core Scripts -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+<script src="js/firebase.js"></script>
+
+<!-- Admin Dashboard Firebase Loader -->
+<script>
+firestore.collection("bookings").orderBy("timestamp", "desc").onSnapshot(snapshot => {
+  const table = document.getElementById("bookingData");
+  table.innerHTML = "";
+
+  snapshot.forEach(doc => {
+    const b = doc.data();
+    table.innerHTML += `
+      <tr>
+        <td>${b.name}</td>
+        <td>${b.phone}</td>
+        <td>${b.vehicle}</td>
+        <td>${b.startDate}</td>
+        <td>${b.endDate}</td>
+        <td>${b.driver}</td>
+        <td>Pending</td>
+      </tr>
+    `;
+  });
+});
+</script>
+
 </body>
 </html>
 
-
+     
