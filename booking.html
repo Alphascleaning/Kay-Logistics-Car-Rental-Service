@@ -44,18 +44,19 @@
   </div>
 
   <!-- Booking Form -->
- <form id="bookingForm" class="booking-form" action="booking-confirmation.html">
-  <label>Full Name</label>
-    <input type="text" required>
+  <form id="bookingForm" class="booking-form">
+
+    <label>Full Name</label>
+    <input type="text" id="fullName" required>
 
     <label>Phone Number</label>
-    <input type="text" required>
+    <input type="text" id="phoneNumber" required>
 
     <label>Email</label>
-    <input type="email" required>
+    <input type="email" id="emailAddress" required>
 
     <label>Select Vehicle</label>
-    <select name="vehicle" required>
+    <select id="vehicleSelect" name="vehicle" required>
       <option value="">Choose a vehicle</option>
       <option>Mercedes-Benz ML 320 (Petrol)</option>
       <option>Toyota Land Cruiser Prado (Diesel)</option>
@@ -64,21 +65,21 @@
 
     <!-- Automatic Price Box -->
     <div id="priceBox" class="info-box price-box">
-      <h3><i class="fa-solid fa-money-bill"></i> Price</h3>
+      <h3><i class='fa-solid fa-money-bill'></i> Price</h3>
       <p>Select a vehicle to view pricing.</p>
     </div>
 
     <label>Rental Start Date</label>
-    <input type="date" required>
+    <input type="date" id="startDate" required>
 
     <label>Rental End Date</label>
-    <input type="date" required>
+    <input type="date" id="endDate" required>
 
     <label>Pickup Location</label>
-    <input type="text" required>
+    <input type="text" id="pickupLocation" required>
 
     <label>Do you provide your own driver?</label>
-    <select required>
+    <select id="driverOption" required>
       <option value="No">No — KLCRS driver</option>
       <option value="Yes">Yes — I provide my own driver</option>
     </select>
@@ -106,7 +107,7 @@ const prices = {
   "Nissan X-Trail (Diesel)": { inland: 25, upland: 56 }
 };
 
-document.querySelector("select[name='vehicle']").onchange = function() {
+document.getElementById("vehicleSelect").onchange = function() {
   const vehicle = this.value;
   if (prices[vehicle]) {
     const inland = prices[vehicle].inland;
@@ -119,22 +120,25 @@ document.querySelector("select[name='vehicle']").onchange = function() {
   }
 };
 </script>
+
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 <script src="js/firebase.js"></script>
-<script>
 
-  document.getElementById("bookingForm").addEventListener("submit", function(e) {
+<!-- Booking Save Script -->
+<script>
+document.getElementById("bookingForm").addEventListener("submit", function(e) {
   e.preventDefault();
 
-  const name = document.querySelector("input[type='text']").value;
-  const phone = document.querySelectorAll("input[type='text']")[1].value;
-  const email = document.querySelector("input[type='email']").value;
-  const vehicle = document.querySelector("select[name='vehicle']").value;
-  const startDate = document.querySelectorAll("input[type='date']")[0].value;
-  const endDate = document.querySelectorAll("input[type='date']")[1].value;
-  const pickup = document.querySelectorAll("input[type='text']")[2].value;
-  const driver = document.querySelectorAll("select")[1].value;
+  const name = document.getElementById("fullName").value;
+  const phone = document.getElementById("phoneNumber").value;
+  const email = document.getElementById("emailAddress").value;
+  const vehicle = document.getElementById("vehicleSelect").value;
+  const startDate = document.getElementById("startDate").value;
+  const endDate = document.getElementById("endDate").value;
+  const pickup = document.getElementById("pickupLocation").value;
+  const driver = document.getElementById("driverOption").value;
 
   firestore.collection("bookings").add({
     name,
@@ -148,6 +152,9 @@ document.querySelector("select[name='vehicle']").onchange = function() {
     timestamp: new Date()
   }).then(() => {
     window.location.href = "booking-confirmation.html";
+  }).catch(err => {
+    console.error("Booking save failed:", err);
+    alert("Error saving booking. Check console.");
   });
 });
 </script>
