@@ -150,14 +150,18 @@ document.getElementById("bookingForm").addEventListener("submit", function(e) {
     pickup,
     driver,
     timestamp: new Date()
-  }).then(() => {
+  })
+  .then(() => {
+    alert("Your booking has been submitted successfully!");
     window.location.href = "booking-confirmation.html";
-  }).catch(err => {
+  })
+  .catch(err => {
     console.error("Booking save failed:", err);
-    alert("Error saving booking. Check console.");
+    alert("Booking failed. Please check your Firebase connection.");
   });
 });
 </script>
+
 
 </body>
 </html>
