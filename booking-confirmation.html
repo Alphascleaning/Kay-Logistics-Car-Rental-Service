@@ -13,7 +13,7 @@ function generatePDF() {
   const endDate = document.getElementById("custEnd").value;
   const pickup = document.getElementById("custPickup").value;
   const driver = document.getElementById("custDriver").value;
-  const idNumber = document.getElementById("custID").value; // NEW FIELD
+  const idNumber = document.getElementById("custID").value; // UPDATED FIELD
 
   // -----------------------------
   // 2. KLCRS Watermark
@@ -23,11 +23,10 @@ function generatePDF() {
   doc.setTextColor(240, 240, 240);
   doc.text("KLCRS", 35, 150, { angle: 45 });
 
-  // Reset text color
   doc.setTextColor(0, 0, 0);
 
   // -----------------------------
-  // 3. Header + Logo
+  // 3. Header
   // -----------------------------
   doc.setFontSize(18);
   doc.text("Kay Logistics Car Rental Service (KLCRS)", 10, 15);
@@ -45,7 +44,7 @@ function generatePDF() {
   doc.text(`Full Name: ${name}`, 10, 50);
   doc.text(`Phone Number: ${phone}`, 10, 58);
   doc.text(`Email: ${email}`, 10, 66);
-  doc.text(`DI#/Passport#: ${idNumber}`, 10, 74);
+  doc.text(`ID#/Passport#: ${idNumber}`, 10, 74); // UPDATED LABEL
 
   // -----------------------------
   // 5. Rental Details
@@ -83,14 +82,14 @@ function generatePDF() {
   );
 
   // -----------------------------
-  // 7. Signature Section (Option B)
+  // 7. Signature Section
   // -----------------------------
   doc.setFont("Helvetica", "bold");
   doc.text("Customer Signature: _______________________________", 10, 195);
   doc.text("Date of Signature: _______________________________", 10, 205);
 
   // -----------------------------
-  // 8. KLCRS Signature Box
+  // 8. KLCRS Representative Signature
   // -----------------------------
   doc.setFont("Helvetica", "bold");
   doc.text("KLCRS Representative Signature:", 10, 225);
