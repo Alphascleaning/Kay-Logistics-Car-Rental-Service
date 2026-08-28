@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
+
 <body>
 <header>
   <div class="logo">KLCRS</div>
@@ -27,102 +28,115 @@
 
     <!-- ML 320 -->
     <div class="card">
-    <span class="badge">Featured</span>
-    <img src="assets/img/ml320.jpg" alt="Mercedes-Benz ML 320">
+      <span class="badge">Featured</span>
+      <img src="assets/img/ml320.jpg" alt="Mercedes-Benz ML 320">
 
-    <h3>Mercedes-Benz ML 320 (2001)</h3>
+      <h3>Mercedes-Benz ML 320 (2001)</h3>
 
-    <div class="spec-icons">
+      <div class="spec-icons">
         <span><i class="fa-solid fa-car"></i> 4x4</span>
         <span><i class="fa-solid fa-gear"></i> Automatic</span>
-        <span><i class="fa-solid fa-gas-pump"></i> Fuel Policy</span>
+        <span><i class="fa-solid fa-gas-pump"></i> Petrol</span>
         <span><i class="fa-solid fa-map-location-dot"></i> GPS</span>
+      </div>
+
+      <button class="details-btn"
+        onclick="openModal(
+          'Mercedes-Benz ML 320 (2001)',
+          'assets/img/ml320.jpg',
+          '4x4, Automatic, Petrol, GPS',
+          'Comfortable 4x4 jeep suitable for inland and upland routes.',
+          'Inland: €25/day — Upland: €56/day',
+          'Fuel Type: Petrol — Fuel not included. Vehicle must be returned with same reserve fuel.',
+          'GPS tracker installed — unauthorized travel outside rental area incurs extra fees.'
+        )">
+        View Details
+      </button>
+
+      <p>Comfortable 4x4 jeep suitable for inland and upland routes.</p>
+      <p><strong>Inland:</strong> €25/day — <strong>Upland:</strong> €56/day</p>
+      <p><strong>Fuel Type:</strong> Petrol</p>
+      <p>Fuel not included. Vehicle must be returned with same reserve fuel.</p>
+      <p>GPS tracker installed — unauthorized travel outside rental area incurs extra fees.</p>
+
+      <a href="booking.html" class="btn-primary">Book this vehicle</a>
     </div>
-<button class="details-btn"
-        onclick="openModal('Mercedes-Benz ML 320 (2001)',
-                          'assets/img/ml320.jpg',
-                          '4x4, Automatic, GPS',
-                          'Comfortable 4x4 jeep suitable for inland and upland routes.',
-                          'Inland: €25/day — Upland: €56/day',
-                          'Fuel not included. Vehicle must be returned with same reserve fuel.',
-                          'GPS tracker installed — unauthorized travel outside rental area incurs extra fees.')">
-  View Details
-</button>
 
-    <p>Comfortable 4x4 jeep suitable for inland and upland routes.</p>
-    <p><strong>Inland:</strong> €25/day — <strong>Upland:</strong> €56/day</p>
-    <p>Fuel not included. Vehicle must be returned with same reserve fuel.</p>
-    <p>GPS tracker installed — unauthorized travel outside rental area incurs extra fees.</p>
-
-    <a href="booking.html" class="btn-primary">Book this vehicle</a>
-</div>
-
-   <!-- Prado -->
+    <!-- Prado -->
     <div class="card">
-     <div class="card">
-    <span class="badge">Featured</span>
-    <img src="assets/img/prado.jpg" alt="Toyota Land Cruiser Prado">
+      <span class="badge">Featured</span>
+      <img src="assets/img/prado.jpg" alt="Toyota Land Cruiser Prado">
 
-    <h3>Toyota Land Cruiser Prado</h3>
-    <div class="spec-icons">
-    <span><i class="fa-solid fa-car"></i> 4x4</span>
-    <span><i class="fa-solid fa-road"></i> Long Distance</span>
-    <span><i class="fa-solid fa-gas-pump"></i> Fuel Policy</span>
-    <span><i class="fa-solid fa-map-location-dot"></i> GPS</span>
-</div>   
-    <button class="details-btn"
-        onclick="openModal('Toyota Land Cruiser Prado',
-                          'assets/img/prado.jpg',
-                          '4x4, Long Distance, GPS',
-                          'Reliable SUV for long-distance travel and province routes.',
-                          'Inland: €25/day — Upland: €56/day',
-                          'Fuel not included. Vehicle must be returned with same reserve fuel.',
-                          'GPS tracker installed — unauthorized travel outside rental area incurs extra fees.')">
-  View Details
-</button>
-   
-    <p>Reliable SUV for long-distance travel and province routes.</p>
-    <p><strong>Inland:</strong> €25/day — <strong>Upland:</strong> €56/day</p>
-    <p>Fuel not included. Vehicle must be returned with same reserve fuel.</p>
-    <p>GPS tracker installed — unauthorized travel outside rental area incurs extra fees.</p>
+      <h3>Toyota Land Cruiser Prado</h3>
 
-    <a href="booking.html" class="btn-primary">Book this vehicle</a>
-</div>
- 
+      <div class="spec-icons">
+        <span><i class="fa-solid fa-car"></i> 4x4</span>
+        <span><i class="fa-solid fa-road"></i> Long Distance</span>
+        <span><i class="fa-solid fa-gas-pump"></i> Diesel</span>
+        <span><i class="fa-solid fa-map-location-dot"></i> GPS</span>
+      </div>
+
+      <button class="details-btn"
+        onclick="openModal(
+          'Toyota Land Cruiser Prado',
+          'assets/img/prado.jpg',
+          '4x4, Long Distance, Diesel, GPS',
+          'Reliable SUV for long-distance travel and province routes.',
+          'Inland: €25/day — Upland: €56/day',
+          'Fuel Type: Diesel — Fuel not included. Vehicle must be returned with same reserve fuel.',
+          'GPS tracker installed — unauthorized travel outside rental area incurs extra fees.'
+        )">
+        View Details
+      </button>
+
+      <p>Reliable SUV for long-distance travel and province routes.</p>
+      <p><strong>Inland:</strong> €25/day — <strong>Upland:</strong> €56/day</p>
+      <p><strong>Fuel Type:</strong> Diesel</p>
+      <p>Fuel not included. Vehicle must be returned with same reserve fuel.</p>
+      <p>GPS tracker installed — unauthorized travel outside rental area incurs extra fees.</p>
+
+      <a href="booking.html" class="btn-primary">Book this vehicle</a>
+    </div>
 
     <!-- X-Trail -->
     <div class="card">
-    <span class="badge">Featured</span>
-    <img src="assets/img/xtrail.jpg" alt="Nissan X-Trail">
-    <h3>Nissan X-Trail</h3>
-    <div class="spec-icons">
-    <span><i class="fa-solid fa-car"></i> Compact SUV</span>
-    <span><i class="fa-solid fa-road"></i> City Trips</span>
-    <span><i class="fa-solid fa-gas-pump"></i> Fuel Policy</span>
-    <span><i class="fa-solid fa-map-location-dot"></i> GPS</span>
-</div>
-<button class="details-btn"
-        onclick="openModal('Nissan X-Trail',
-                          'assets/img/xtrail.jpg',
-                          'Compact SUV, City Trips, GPS',
-                          'Compact SUV ideal for city and light upland trips.',
-                          'Inland: €25/day — Upland: €56/day',
-                          'Fuel not included. Vehicle must be returned with same reserve fuel.',
-                          'GPS tracker installed — unauthorized travel outside rental area incurs extra fees.')">
-  View Details
-</button>
+      <span class="badge">Featured</span>
+      <img src="assets/img/xtrail.jpg" alt="Nissan X-Trail">
 
-    <p>Compact SUV ideal for city and light upland trips.</p>
-    <p><strong>Inland:</strong> €25/day — <strong>Upland:</strong> €56/day</p>
-    <p>Fuel not included. Vehicle must be returned with same reserve fuel.</p>
-    <p>GPS tracker installed — unauthorized travel outside rental area incurs extra fees.</p>
+      <h3>Nissan X-Trail</h3>
 
-    <a href="booking.html" class="btn-primary">Book this vehicle</a>
-</div>
-  
+      <div class="spec-icons">
+        <span><i class="fa-solid fa-car"></i> Compact SUV</span>
+        <span><i class="fa-solid fa-road"></i> City Trips</span>
+        <span><i class="fa-solid fa-gas-pump"></i> Diesel</span>
+        <span><i class="fa-solid fa-map-location-dot"></i> GPS</span>
+      </div>
+
+      <button class="details-btn"
+        onclick="openModal(
+          'Nissan X-Trail',
+          'assets/img/xtrail.jpg',
+          'Compact SUV, City Trips, Diesel, GPS',
+          'Compact SUV ideal for city and light upland trips.',
+          'Inland: €25/day — Upland: €56/day',
+          'Fuel Type: Diesel — Fuel not included. Vehicle must be returned with same reserve fuel.',
+          'GPS tracker installed — unauthorized travel outside rental area incurs extra fees.'
+        )">
+        View Details
+      </button>
+
+      <p>Compact SUV ideal for city and light upland trips.</p>
+      <p><strong>Inland:</strong> €25/day — <strong>Upland:</strong> €56/day</p>
+      <p><strong>Fuel Type:</strong> Diesel</p>
+      <p>Fuel not included. Vehicle must be returned with same reserve fuel.</p>
+      <p>GPS tracker installed — unauthorized travel outside rental area incurs extra fees.</p>
+
+      <a href="booking.html" class="btn-primary">Book this vehicle</a>
+    </div>
 
   </div>
 </section>
+
 <!-- Vehicle Details Modal -->
 <div id="vehicleModal" class="modal">
   <div class="modal-content">
@@ -141,7 +155,8 @@
     <a id="modalBookBtn" href="booking.html" class="btn-primary">Book this vehicle</a>
   </div>
 </div>
-  <script>
+
+<script>
 function openModal(title, image, specs, description, pricing, fuel, gps) {
   document.getElementById('modalTitle').innerText = title;
   document.getElementById('modalImage').src = image;
@@ -166,13 +181,8 @@ window.onclick = function(event) {
 </script>
 
 <footer>
-    © Kay Logistics Car Rental Service (KLCRS)
+  © Kay Logistics Car Rental Service (KLCRS)
 </footer>
-</body>
-</html>
-<footer>
-  &copy; Kay Logistics Car Rental Service (KLCRS)
-</footer>
-</body>
-</html>
 
+</body>
+</html>
