@@ -3,38 +3,127 @@
 <head>
   <meta charset="UTF-8">
   <title>KLCRS Rental Agreement</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+
+  <style>
+    /* GOLD HEADER */
+    .header {
+      background-color: #D4AF37; /* KLCRS Gold */
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid #000;
+    }
+
+    .header-title {
+      font-size: 26px;
+      font-weight: bold;
+      color: black;
+    }
+
+    .fleet-logo {
+      width: 120px;
+      height: auto;
+    }
+
+    /* AGREEMENT NUMBER */
+    .agreement-number {
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 15px;
+      color: black;
+    }
+
+    /* SECTION BOXES */
+    .section-box {
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 6px;
+      background: #fff;
+    }
+
+    /* BLUE TITLES */
+    .section-title {
+      color: #0047AB; /* KLCRS Blue */
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    /* BLACK TEXT */
+    .section-box p,
+    .section-box li {
+      color: black;
+      font-size: 16px;
+    }
+
+    /* QR SECTION */
+    .qr-box {
+      text-align: right;
+      margin-top: 30px;
+    }
+
+    /* BUTTONS */
+    .button-bar {
+      margin-top: 30px;
+      display: flex;
+      gap: 15px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      background: #0047AB;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .btn:hover {
+      background: #003b8e;
+    }
+
+    /* ADMIN LINK */
+    .admin-link {
+      margin-top: 20px;
+      font-size: 16px;
+    }
+
+    .admin-link a {
+      color: #0047AB;
+      font-weight: bold;
+      text-decoration: none;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="agreement-container">
-
-  <!-- Header -->
-  <div class="agreement-header">
-    <div class="agreement-title">
-      <h1>Rental Agreement</h1>
-      <p>Kay Logistics Car Rental Service (KLCRS)</p>
-    </div>
-
-    <!-- Fleet Logo -->
-    <div class="agreement-logo">
-      <img src="assets/img/klcrs-fleet.png" alt="KLCRS Fleet Logo">
-    </div>
+  <!-- GOLD HEADER -->
+  <div class="header">
+    <div class="header-title">Kay Logistics Car Rental Service (KLCRS)</div>
+    <img src="assets/img/klcrs-fleet.png" class="fleet-logo" alt="KLCRS Fleet Badge">
   </div>
 
-  <!-- Customer Info -->
-  <div class="agreement-section">
-    <h2>Customer Information</h2>
+  <!-- AGREEMENT NUMBER -->
+  <div class="agreement-number">
+    Agreement Number: <span id="agreementNumber"></span>
+  </div>
+
+  <!-- CUSTOMER INFORMATION -->
+  <div class="section-box">
+    <div class="section-title">Customer Information</div>
     <p><strong>Full Name:</strong> <span id="custName"></span></p>
     <p><strong>Phone Number:</strong> <span id="custPhone"></span></p>
     <p><strong>Email:</strong> <span id="custEmail"></span></p>
     <p><strong>ID#/Passport#:</strong> ___________________________</p>
   </div>
 
-  <!-- Rental Details -->
-  <div class="agreement-section">
-    <h2>Rental Details</h2>
+  <!-- RENTAL DETAILS -->
+  <div class="section-box">
+    <div class="section-title">Rental Details</div>
     <p><strong>Vehicle:</strong> <span id="custVehicle"></span></p>
     <p><strong>Rental Start Date:</strong> <span id="custStart"></span></p>
     <p><strong>Rental End Date:</strong> <span id="custEnd"></span></p>
@@ -42,9 +131,9 @@
     <p><strong>Driver Option:</strong> <span id="custDriver"></span></p>
   </div>
 
-  <!-- Terms -->
-  <div class="agreement-section">
-    <h2>Terms & Conditions</h2>
+  <!-- TERMS -->
+  <div class="section-box">
+    <div class="section-title">Terms & Conditions</div>
     <ol>
       <li>The renter agrees to return the vehicle in the same condition as received.</li>
       <li>Fuel is not included in the rental price and must be returned at reserve level.</li>
@@ -52,45 +141,52 @@
     </ol>
   </div>
 
-  <!-- Signatures -->
-  <div class="agreement-section">
-    <h2>Signatures</h2>
+  <!-- SIGNATURES -->
+  <div class="section-box">
+    <div class="section-title">Signatures</div>
     <p><strong>Customer Signature:</strong> ___________________________</p>
     <p><strong>Date of Signature:</strong> ___________________________</p>
     <p><strong>KLCRS Representative Signature:</strong> ___________________________</p>
   </div>
 
   <!-- QR -->
-  <div class="agreement-qr">
-    <img src="assets/img/agreement-qr.png" alt="QR Code">
+  <div class="qr-box">
+    <img src="assets/img/agreement-qr.png" alt="QR Code" width="120">
     <p>Scan QR to verify agreement</p>
   </div>
 
-</div>
+  <!-- BUTTONS -->
+  <div class="button-bar">
+    <button class="btn" onclick="window.print()">Print / Save as PDF</button>
+    <button class="btn" onclick="window.location.href='admin.html'">Admin Booking Viewer</button>
+  </div>
+
+  <!-- ADMIN LINK -->
+  <div class="admin-link">
+    <a href="admin.html">Go to Admin Booking Viewer</a>
+  </div>
 
 <script>
-// Load booking data from URL parameters
-const params = new URLSearchParams(window.location.search);
+  // Auto-generate agreement number
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  const randomDigits = Math.floor(1000 + Math.random() * 9000);
+  const agreementNumber = `RA-${yyyy}-${mm}-${dd}-${randomDigits}`;
+  document.getElementById("agreementNumber").textContent = agreementNumber;
 
-document.getElementById("custName").textContent = params.get("name");
-document.getElementById("custPhone").textContent = params.get("phone");
-document.getElementById("custEmail").textContent = params.get("email");
-document.getElementById("custVehicle").textContent = params.get("vehicle");
-document.getElementById("custStart").textContent = params.get("startDate");
-document.getElementById("custEnd").textContent = params.get("endDate");
-document.getElementById("custPickup").textContent = params.get("pickup");
-document.getElementById("custDriver").textContent = params.get("driver");
+  // Load booking data from URL parameters
+  const params = new URLSearchParams(window.location.search);
+  document.getElementById("custName").textContent = params.get("name");
+  document.getElementById("custPhone").textContent = params.get("phone");
+  document.getElementById("custEmail").textContent = params.get("email");
+  document.getElementById("custVehicle").textContent = params.get("vehicle");
+  document.getElementById("custStart").textContent = params.get("startDate");
+  document.getElementById("custEnd").textContent = params.get("endDate");
+  document.getElementById("custPickup").textContent = params.get("pickup");
+  document.getElementById("custDriver").textContent = params.get("driver");
 </script>
 
 </body>
 </html>
-
-    
-
-
-
- 
- 
-
- 
-  
