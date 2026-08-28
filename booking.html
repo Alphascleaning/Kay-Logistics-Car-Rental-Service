@@ -4,7 +4,9 @@
   <meta charset="UTF-8">
   <title>KLCRS Booking</title>
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
+
 <body>
 <header>
   <div class="logo">KLCRS</div>
@@ -19,39 +21,69 @@
 </header>
 
 <section class="section">
-  <h2>Book a Vehicle</h2>
-  <p>Please fill out the form below to submit your booking request. KLCRS will contact you to confirm your reservation.</p>
+  <h2>Book Your Vehicle</h2>
+  <p>Complete the form below to reserve your preferred vehicle. A confirmation will be sent after review.</p>
 
-  <form id="bookingForm">
-    <label>Full Name</label><br>
-    <input type="text" id="name" required><br><br>
+  <!-- Fuel Policy Box -->
+  <div class="info-box fuel-box">
+    <h3><i class="fa-solid fa-gas-pump"></i> Fuel Policy</h3>
+    <p>
+      All KLCRS vehicles come with **reserve fuel** at the start of the rental.  
+      Fuel is **not included** in the rental price.  
+      The vehicle must be returned with the **same amount of reserve fuel** provided at pickup.
+    </p>
+  </div>
 
-    <label>Phone Number</label><br>
-    <input type="text" id="phone" required><br><br>
+  <!-- Driver Responsibility Box -->
+  <div class="info-box driver-box">
+    <h3><i class="fa-solid fa-user-shield"></i> Driver Responsibility</h3>
+    <p>
+      If you choose to provide **your own driver**, you accept **full responsibility** for any damages caused during the rental period.  
+      KLCRS will not cover repair or maintenance costs resulting from renter‑provided drivers.
+    </p>
+  </div>
 
-    <label>Email</label><br>
-    <input type="email" id="email" required><br><br>
+  <!-- Booking Form -->
+  <form class="booking-form">
+    <label>Full Name</label>
+    <input type="text" required>
 
-    <label>Select Vehicle</label><br>
-    <select id="carId" required>
-      <option value="ml320_2001">Mercedes-Benz ML 320 (2001)</option>
-      <option value="prado_placeholder">Toyota Land Cruiser Prado</option>
-      <option value="xtrail_placeholder">Nissan X-Trail</option>
-    </select><br><br>
+    <label>Phone Number</label>
+    <input type="text" required>
 
-    <label>Rental Area</label><br>
-    <select id="area" required>
-      <option value="inland">Inland (Freetown–Waterloo) – €25/day</option>
-      <option value="upland">Upland / Provinces – €56/day</option>
-    </select><br><br>
+    <label>Email</label>
+    <input type="email" required>
 
-    <label>Start Date</label><br>
-    <input type="date" id="startDate" required><br><br>
+    <label>Select Vehicle</label>
+    <select required>
+      <option value="">Choose a vehicle</option>
+      <option>Mercedes-Benz ML 320 (Petrol)</option>
+      <option>Toyota Land Cruiser Prado (Diesel)</option>
+      <option>Nissan X-Trail (Diesel)</option>
+    </select>
 
-    <label>End Date</label><br>
-    <input type="date" id="endDate" required><br><br>
+    <label>Rental Start Date</label>
+    <input type="date" required>
 
-    <label>Will you provide your own driver?</label><br>
-    <select id="ownDriver" required>
-      <option value="no">No, use KLCRS driver</option>
-      <option value="yes">
+    <label>Rental End Date</label>
+    <input type="date" required>
+
+    <label>Pickup Location</label>
+    <input type="text" required>
+
+    <label>Do you provide your own driver?</label>
+    <select required>
+      <option value="No">No — KLCRS driver</option>
+      <option value="Yes">Yes — I provide my own driver</option>
+    </select>
+
+    <button type="submit" class="btn-primary">Submit Booking</button>
+  </form>
+</section>
+
+<footer>
+  © Kay Logistics Car Rental Service (KLCRS)
+</footer>
+
+</body>
+</html>
