@@ -170,10 +170,11 @@ document.querySelector(".close-btn").onclick = function() {
   document.getElementById("successModal").style.display = "none";
 };
 
-// Continue button
-document.getElementById("continueBtn").onclick = function() {
-  window.location.href = "booking-confirmation.html";
+document.getElementById("continueBtn").onclick = function () {
+    document.getElementById("successModal").style.display = "none";
+    window.location.href = "booking-confirmation.html";
 };
+
 </script>
 
 <!-- Success Modal -->
