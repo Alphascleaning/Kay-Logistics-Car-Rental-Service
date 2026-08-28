@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Contact KLCRS</title>
+  <title>KLCRS Contact</title>
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-<body>
 
+<body>
 <header>
   <div class="logo">KLCRS</div>
   <nav>
@@ -21,68 +22,49 @@
 
 <section class="section">
   <h2>Contact Us</h2>
-  <p>If you have questions, need assistance, or want to make an inquiry, feel free to reach out to KLCRS using the details below.</p>
+  <p>If you have questions about vehicles, pricing, or bookings, reach out using the form or WhatsApp.</p>
 
-  <div class="contact-info">
-    <p><strong>Address:</strong> 3 Peacock Farm, Wellington, Freetown, Sierra Leone</p>
-    <p><strong>Phone:</strong> +23276699658</p>
-    <p><strong>Email:</strong> alpha_kamara@hotmail.de</p>
-    <p><strong>Website:</strong> www.klcrs.de</p>
+  <div class="contact-grid">
+
+    <!-- Contact Details -->
+    <div class="contact-card">
+      <h3><i class="fa-solid fa-phone"></i> Contact Details</h3>
+      <p><strong>Phone:</strong> +232 7669 9658</p>
+      <p><strong>Email:</strong> info@klcrs.com</p>
+      <p><strong>Location:</strong> Freetown, Sierra Leone</p>
+
+      <a href="https://wa.me/23276699658?text=Hello%20KLCRS,%20I%20have%20a%20question%20about%20your%20vehicles."
+         class="btn-whatsapp">
+         <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
+      </a>
+    </div>
+
+    <!-- Contact Form -->
+    <div class="contact-card">
+      <h3><i class="fa-solid fa-envelope"></i> Send Us a Message</h3>
+      <form class="contact-form">
+        <label>Your Name</label>
+        <input type="text" required>
+
+        <label>Your Email</label>
+        <input type="email" required>
+
+        <label>Subject</label>
+        <input type="text" required>
+
+        <label>Message</label>
+        <textarea rows="5" required></textarea>
+
+        <button type="submit" class="btn-primary">Send Message</button>
+      </form>
+    </div>
+
   </div>
 </section>
 
-<section class="section">
-  <h2>Send Us a Message</h2>
-
-  <form id="contactForm">
-    <label>Your Name</label><br>
-    <input type="text" id="name" required><br><br>
-
-    <label>Your Email</label><br>
-    <input type="email" id="email" required><br><br>
-
-    <label>Your Message</label><br>
-    <textarea id="message" rows="5" required></textarea><br><br>
-
-    <button type="submit" class="btn-primary">Send Message</button>
-  </form>
-
-  <p id="contactStatus"></p>
-</section>
-
 <footer>
-  &copy; Kay Logistics Car Rental Service (KLCRS)
+  © Kay Logistics Car Rental Service (KLCRS)
 </footer>
-
-<script src="js/firebase.js"></script>
-<script>
-  const form = document.getElementById('contactForm');
-  const statusEl = document.getElementById('contactStatus');
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    statusEl.textContent = 'Sending message...';
-
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const message = document.getElementById('message').value;
-
-    try {
-      await window.firestore.collection('messages').add({
-        name,
-        email,
-        message,
-        createdAt: new Date()
-      });
-
-      statusEl.textContent = 'Message sent successfully. KLCRS will reply soon.';
-      form.reset();
-    } catch (err) {
-      console.error(err);
-      statusEl.textContent = 'Error sending message. Please try again.';
-    }
-  });
-</script>
 
 </body>
 </html>
