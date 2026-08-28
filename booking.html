@@ -123,6 +123,35 @@ document.querySelector("select[name='vehicle']").onchange = function() {
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 <script src="js/firebase.js"></script>
+<script>
+
+  document.getElementById("bookingForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const name = document.querySelector("input[type='text']").value;
+  const phone = document.querySelectorAll("input[type='text']")[1].value;
+  const email = document.querySelector("input[type='email']").value;
+  const vehicle = document.querySelector("select[name='vehicle']").value;
+  const startDate = document.querySelectorAll("input[type='date']")[0].value;
+  const endDate = document.querySelectorAll("input[type='date']")[1].value;
+  const pickup = document.querySelectorAll("input[type='text']")[2].value;
+  const driver = document.querySelectorAll("select")[1].value;
+
+  firestore.collection("bookings").add({
+    name,
+    phone,
+    email,
+    vehicle,
+    startDate,
+    endDate,
+    pickup,
+    driver,
+    timestamp: new Date()
+  }).then(() => {
+    window.location.href = "booking-confirmation.html";
+  });
+});
+</script>
 
 </body>
 </html>
