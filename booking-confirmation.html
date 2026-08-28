@@ -23,6 +23,16 @@
     <p>Your booking request has been submitted.</p>
     <p>KLCRS will contact you shortly to confirm availability and finalize your reservation.</p>
 
+    <!-- PDF Button -->
+    <button onclick="generatePDF()" class="btn-primary">
+      <i class="fa-solid fa-file-pdf"></i> Download Rental Agreement (PDF)
+    </button>
+
+    <!-- WhatsApp Button -->
+    <a href="#" id="whatsappPDF" class="btn-whatsapp">
+      <i class="fa-brands fa-whatsapp"></i> Send Agreement via WhatsApp
+    </a>
+
     <a href="index.html" class="btn-primary">Return Home</a>
   </div>
 </section>
@@ -30,6 +40,43 @@
 <footer>
   © Kay Logistics Car Rental Service (KLCRS)
 </footer>
+
+<!-- PDF Generator Script -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+function generatePDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  doc.setFontSize(16);
+  doc.text("KLCRS Rental Agreement", 20, 20);
+
+  doc.setFontSize(12);
+  doc.text("Customer Name: ____________________", 20, 40);
+  doc.text("Phone Number: ____________________", 20, 50);
+  doc.text("Email: ____________________", 20, 60);
+
+  doc.text("Vehicle: ____________________", 20, 80);
+  doc.text("Fuel Type: ____________________", 20, 90);
+  doc.text("Rental Start Date: ____________________", 20, 100);
+  doc.text("Rental End Date: ____________________", 20, 110);
+
+  doc.text("Fuel Policy:", 20, 130);
+  doc.text("Vehicle comes with reserve fuel. Must be returned with same amount.", 20, 140);
+
+  doc.text("Driver Responsibility:", 20, 160);
+  doc.text("If renter provides own driver, renter is fully responsible for damages.", 20, 170);
+
+  doc.text("Signature: ____________________", 20, 200);
+
+  doc.save("KLCRS_Rental_Agreement.pdf");
+
+  // WhatsApp link
+  document.getElementById("whatsappPDF").href =
+    "https://wa.me/23276699658?text=Hello%20KLCRS,%20I%20have%20downloaded%20my%20rental%20agreement.";
+}
+</script>
+
 </body>
 </html>
-
