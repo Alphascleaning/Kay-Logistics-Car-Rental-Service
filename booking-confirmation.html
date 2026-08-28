@@ -1,82 +1,100 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Booking Confirmed – KLCRS</title>
-  <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-</head>
-
-<body>
-<header>
-  <div class="logo">KLCRS</div>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="fleet.html">Fleet</a>
-    <a href="booking.html">Booking</a>
-  </nav>
-</header>
-
-<section class="section">
-  <div class="confirmation-box">
-    <h2><i class="fa-solid fa-circle-check"></i> Booking Successful</h2>
-    <p>Your booking request has been submitted.</p>
-    <p>KLCRS will contact you shortly to confirm availability and finalize your reservation.</p>
-
-    <!-- PDF Button -->
-    <button onclick="generatePDF()" class="btn-primary">
-      <i class="fa-solid fa-file-pdf"></i> Download Rental Agreement (PDF)
-    </button>
-
-    <!-- WhatsApp Button -->
-    <a href="#" id="whatsappPDF" class="btn-whatsapp">
-      <i class="fa-brands fa-whatsapp"></i> Send Agreement via WhatsApp
-    </a>
-
-    <a href="index.html" class="btn-primary">Return Home</a>
-  </div>
-</section>
-
-<footer>
-  © Kay Logistics Car Rental Service (KLCRS)
-</footer>
-
-<!-- PDF Generator Script -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<script>
 function generatePDF() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
 
-  doc.setFontSize(16);
-  doc.text("KLCRS Rental Agreement", 20, 20);
+  // -----------------------------
+  // 1. Fetch Form Data
+  // -----------------------------
+  const name = document.getElementById("custName").value;
+  const phone = document.getElementById("custPhone").value;
+  const email = document.getElementById("custEmail").value;
+  const vehicle = document.getElementById("custVehicle").value;
+  const startDate = document.getElementById("custStart").value;
+  const endDate = document.getElementById("custEnd").value;
+  const pickup = document.getElementById("custPickup").value;
+  const driver = document.getElementById("custDriver").value;
+  const idNumber = document.getElementById("custID").value; // NEW FIELD
+
+  // -----------------------------
+  // 2. KLCRS Watermark
+  // -----------------------------
+  doc.setFont("Helvetica", "bold");
+  doc.setFontSize(60);
+  doc.setTextColor(240, 240, 240);
+  doc.text("KLCRS", 35, 150, { angle: 45 });
+
+  // Reset text color
+  doc.setTextColor(0, 0, 0);
+
+  // -----------------------------
+  // 3. Header + Logo
+  // -----------------------------
+  doc.setFontSize(18);
+  doc.text("Kay Logistics Car Rental Service (KLCRS)", 10, 15);
 
   doc.setFontSize(12);
-  doc.text("Customer Name: ____________________", 20, 40);
-  doc.text("Phone Number: ____________________", 20, 50);
-  doc.text("Email: ____________________", 20, 60);
+  doc.text("Rental Agreement", 10, 25);
 
-  doc.text("Vehicle: ____________________", 20, 80);
-  doc.text("Fuel Type: ____________________", 20, 90);
-  doc.text("Rental Start Date: ____________________", 20, 100);
-  doc.text("Rental End Date: ____________________", 20, 110);
+  // -----------------------------
+  // 4. Customer Information
+  // -----------------------------
+  doc.setFontSize(11);
+  doc.text("Customer Information", 10, 40);
+  doc.line(10, 42, 200, 42);
 
-  doc.text("Fuel Policy:", 20, 130);
-  doc.text("Vehicle comes with reserve fuel. Must be returned with same amount.", 20, 140);
+  doc.text(`Full Name: ${name}`, 10, 50);
+  doc.text(`Phone Number: ${phone}`, 10, 58);
+  doc.text(`Email: ${email}`, 10, 66);
+  doc.text(`DI#/Passport#: ${idNumber}`, 10, 74);
 
-  doc.text("Driver Responsibility:", 20, 160);
-  doc.text("If renter provides own driver, renter is fully responsible for damages.", 20, 170);
+  // -----------------------------
+  // 5. Rental Details
+  // -----------------------------
+  doc.text("Rental Details", 10, 90);
+  doc.line(10, 92, 200, 92);
 
-  doc.text("Signature: ____________________", 20, 200);
+  doc.text(`Vehicle: ${vehicle}`, 10, 100);
+  doc.text(`Rental Start Date: ${startDate}`, 10, 108);
+  doc.text(`Rental End Date: ${endDate}`, 10, 116);
+  doc.text(`Pickup Location: ${pickup}`, 10, 124);
+  doc.text(`Driver Option: ${driver}`, 10, 132);
+
+  // -----------------------------
+  // 6. Terms & Conditions
+  // -----------------------------
+  doc.setFont("Helvetica", "bold");
+  doc.text("Terms & Conditions", 10, 150);
+  doc.setFont("Helvetica", "normal");
+
+  doc.text(
+    "1. The renter agrees to return the vehicle in the same condition as received.",
+    10,
+    160
+  );
+  doc.text(
+    "2. Fuel is not included in the rental price and must be returned at reserve level.",
+    10,
+    168
+  );
+  doc.text(
+    "3. If renter provides their own driver, KLCRS is not responsible for damages.",
+    10,
+    176
+  );
+
+  // -----------------------------
+  // 7. Signature Section (Option B)
+  // -----------------------------
+  doc.setFont("Helvetica", "bold");
+  doc.text("Customer Signature: _______________________________", 10, 195);
+  doc.text("Date of Signature: _______________________________", 10, 205);
+
+  // -----------------------------
+  // 8. KLCRS Signature Box
+  // -----------------------------
+  doc.setFont("Helvetica", "bold");
+  doc.text("KLCRS Representative Signature:", 10, 225);
+  doc.text("_______________________________", 10, 235);
 
   doc.save("KLCRS_Rental_Agreement.pdf");
-
-  // WhatsApp link
-  document.getElementById("whatsappPDF").href =
-    "https://wa.me/23276699658?text=Hello%20KLCRS,%20I%20have%20downloaded%20my%20rental%20agreement.";
 }
-</script>
-
-</body>
-</html>
