@@ -2,280 +2,95 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Booking Confirmation - KLCRS</title>
+  <title>KLCRS Rental Agreement</title>
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
 
-<header>
-  <div class="logo">KLCRS</div>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="fleet.html">Fleet</a>
-    <a href="booking.html">Booking</a>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-    <a href="admin.html">Admin</a>
-  </nav>
-</header>
+<div class="agreement-container">
 
-<section class="section">
-  <h2>Booking Confirmation</h2>
-  <p>Your booking details are shown below. Fill in the fields and click the button to download your rental agreement.</p>
+  <!-- Header -->
+  <div class="agreement-header">
+    <div class="agreement-title">
+      <h1>Rental Agreement</h1>
+      <p>Kay Logistics Car Rental Service (KLCRS)</p>
+    </div>
 
-  <form id="agreementForm">
+    <!-- Fleet Logo -->
+    <div class="agreement-logo">
+      <img src="assets/img/klcrs-fleet.png" alt="KLCRS Fleet Logo">
+    </div>
+  </div>
 
-    <label>Full Name</label>
-    <input type="text" id="custName" required>
+  <!-- Customer Info -->
+  <div class="agreement-section">
+    <h2>Customer Information</h2>
+    <p><strong>Full Name:</strong> <span id="custName"></span></p>
+    <p><strong>Phone Number:</strong> <span id="custPhone"></span></p>
+    <p><strong>Email:</strong> <span id="custEmail"></span></p>
+    <p><strong>ID#/Passport#:</strong> ___________________________</p>
+  </div>
 
-    <label>Phone Number</label>
-    <input type="text" id="custPhone" required>
+  <!-- Rental Details -->
+  <div class="agreement-section">
+    <h2>Rental Details</h2>
+    <p><strong>Vehicle:</strong> <span id="custVehicle"></span></p>
+    <p><strong>Rental Start Date:</strong> <span id="custStart"></span></p>
+    <p><strong>Rental End Date:</strong> <span id="custEnd"></span></p>
+    <p><strong>Pickup Location:</strong> <span id="custPickup"></span></p>
+    <p><strong>Driver Option:</strong> <span id="custDriver"></span></p>
+  </div>
 
-    <label>Email</label>
-    <input type="email" id="custEmail" required>
+  <!-- Terms -->
+  <div class="agreement-section">
+    <h2>Terms & Conditions</h2>
+    <ol>
+      <li>The renter agrees to return the vehicle in the same condition as received.</li>
+      <li>Fuel is not included in the rental price and must be returned at reserve level.</li>
+      <li>If renter provides their own driver, KLCRS is not responsible for damages.</li>
+    </ol>
+  </div>
 
-    <label>ID# / Passport#</label>
-    <input type="text" id="custID" required>
+  <!-- Signatures -->
+  <div class="agreement-section">
+    <h2>Signatures</h2>
+    <p><strong>Customer Signature:</strong> ___________________________</p>
+    <p><strong>Date of Signature:</strong> ___________________________</p>
+    <p><strong>KLCRS Representative Signature:</strong> ___________________________</p>
+  </div>
 
-    <label>Vehicle</label>
-    <input type="text" id="custVehicle" required>
+  <!-- QR -->
+  <div class="agreement-qr">
+    <img src="assets/img/agreement-qr.png" alt="QR Code">
+    <p>Scan QR to verify agreement</p>
+  </div>
 
-    <label>Rental Start Date</label>
-    <input type="date" id="custStart" required>
-
-    <label>Rental End Date</label>
-    <input type="date" id="custEnd" required>
-
-    <label>Pickup Location</label>
-    <input type="text" id="custPickup" required>
-
-    <label>Driver Option</label>
-    <input type="text" id="custDriver" required>
-
-    <button type="button" onclick="generatePDF()" class="btn-primary">
-      Download Rental Agreement (PDF)
-    </button>
-
-  </form>
-
-  <!-- Hidden container for QR code generation -->
-  <div id="qrContainer" style="display:none;"></div>
-</section>
-
-<footer>
-  © Kay Logistics Car Rental Service (KLCRS)
-</footer>
-
-<!-- jsPDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<!-- Firebase core + Firestore -->
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
-<!-- QRCode library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</div>
 
 <script>
-// Firebase configuration (corrected)
-const firebaseConfig = {
-  apiKey: "AIzaSyBTGRBvq-QUQcSsuFDadxJQeyB5E0_UME",
-  authDomain: "klcrs-a7054.firebaseapp.com",
-  projectId: "klcrs-a7054",
-  storageBucket: "klcrs-a7054.appspot.com",
-  messagingSenderId: "972485288867",
-  appId: "1:972485288867:web:8616aba476cf4d997fb016"
-};
+// Load booking data from URL parameters
+const params = new URLSearchParams(window.location.search);
 
-// Initialize Firebase + Firestore
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-// Generate Rental Agreement Number
-function generateAgreementNumber() {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  const unique = Math.floor(Math.random() * 90000) + 10000; // 5-digit
-  return `RA-${year}-${month}-${unique}`;
-}
-
-// Generate QR code data URL for secure verification
-function generateQRCodeDataURL(agreementNumber) {
-  return new Promise((resolve) => {
-    const qrContainer = document.getElementById("qrContainer");
-    qrContainer.innerHTML = "";
-
-    const verifyUrl = `https://yourdomain.com/verify.html?ra=${encodeURIComponent(agreementNumber)}`;
-
-    const qr = new QRCode(qrContainer, {
-      text: verifyUrl,
-      width: 128,
-      height: 128,
-      correctLevel: QRCode.CorrectLevel.H
-    });
-
-    // Wait a bit for QR to render, then get canvas
-    setTimeout(() => {
-      const img = qrContainer.querySelector("img");
-      if (img && img.src) {
-        resolve(img.src);
-      } else {
-        const canvas = qrContainer.querySelector("canvas");
-        resolve(canvas ? canvas.toDataURL("image/png") : null);
-      }
-    }, 500);
-  });
-}
-
-// Store agreement in Firestore
-async function saveAgreementToFirestore(agreementNumber, data) {
-  try {
-    await db.collection("agreements").doc(agreementNumber).set({
-      agreementNumber,
-      ...data,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-    console.log("Agreement saved:", agreementNumber);
-  } catch (err) {
-    console.error("Error saving agreement:", err);
-  }
-}
-
-async function generatePDF() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-
-  // Generate RA#
-  const agreementNumber = generateAgreementNumber();
-
-  // -----------------------------
-  // 1. Fetch Form Data
-  // -----------------------------
-  const name = document.getElementById("custName").value;
-  const phone = document.getElementById("custPhone").value;
-  const email = document.getElementById("custEmail").value;
-  const vehicle = document.getElementById("custVehicle").value;
-  const startDate = document.getElementById("custStart").value;
-  const endDate = document.getElementById("custEnd").value;
-  const pickup = document.getElementById("custPickup").value;
-  const driver = document.getElementById("custDriver").value;
-  const idNumber = document.getElementById("custID").value;
-
-  const agreementData = {
-    name,
-    phone,
-    email,
-    vehicle,
-    startDate,
-    endDate,
-    pickup,
-    driver,
-    idNumber
-  };
-
-  // Save to Firestore
-  await saveAgreementToFirestore(agreementNumber, agreementData);
-
-  // Generate QR code data URL
-  const qrDataURL = await generateQRCodeDataURL(agreementNumber);
-
-  // -----------------------------
-  // 2. KLCRS Watermark
-  // -----------------------------
-  doc.setFont("Helvetica", "bold");
-  doc.setFontSize(60);
-  doc.setTextColor(240, 240, 240);
-  doc.text("KLCRS", 35, 150, { angle: 45 });
-
-  doc.setTextColor(0, 0, 0);
-
-  // -----------------------------
-  // 3. Header + RA#
-  // -----------------------------
-  doc.setFontSize(18);
-  doc.text("Kay Logistics Car Rental Service (KLCRS)", 10, 15);
-
-  doc.setFontSize(12);
-  doc.text("Rental Agreement", 10, 25);
-
-  doc.setFontSize(11);
-  doc.text(`Agreement Number: ${agreementNumber}`, 10, 33);
-
-  // -----------------------------
-  // 4. Customer Information
-  // -----------------------------
-  doc.setFontSize(11);
-  doc.text("Customer Information", 10, 45);
-  doc.line(10, 47, 200, 47);
-
-  doc.text(`Full Name: ${name}`, 10, 55);
-  doc.text(`Phone Number: ${phone}`, 10, 63);
-  doc.text(`Email: ${email}`, 10, 71);
-  doc.text(`ID#/Passport#: ${idNumber}`, 10, 79);
-
-  // -----------------------------
-  // 5. Rental Details
-  // -----------------------------
-  doc.text("Rental Details", 10, 95);
-  doc.line(10, 97, 200, 97);
-
-  doc.text(`Vehicle: ${vehicle}`, 10, 105);
-  doc.text(`Rental Start Date: ${startDate}`, 10, 113);
-  doc.text(`Rental End Date: ${endDate}`, 10, 121);
-  doc.text(`Pickup Location: ${pickup}`, 10, 129);
-  doc.text(`Driver Option: ${driver}`, 10, 137);
-
-  // -----------------------------
-  // 6. Terms & Conditions
-  // -----------------------------
-  doc.setFont("Helvetica", "bold");
-  doc.text("Terms & Conditions", 10, 155);
-  doc.setFont("Helvetica", "normal");
-
-  doc.text(
-    "1. The renter agrees to return the vehicle in the same condition as received.",
-    10,
-    165
-  );
-  doc.text(
-    "2. Fuel is not included in the rental price and must be returned at reserve level.",
-    10,
-    173
-  );
-  doc.text(
-    "3. If renter provides their own driver, KLCRS is not responsible for damages.",
-    10,
-    181
-  );
-
-  // -----------------------------
-  // 7. Signature Section
-  // -----------------------------
-  doc.setFont("Helvetica", "bold");
-  doc.text("Customer Signature: _______________________________", 10, 200);
-  doc.text("Date of Signature: _______________________________", 10, 210);
-
-  // -----------------------------
-  // 8. KLCRS Representative Signature
-  // -----------------------------
-  doc.setFont("Helvetica", "bold");
-  doc.text("KLCRS Representative Signature:", 10, 230);
-  doc.text("_______________________________", 10, 240);
-
-  // -----------------------------
-  // 9. QR Code (Verification)
-  // -----------------------------
-  if (qrDataURL) {
-    doc.setFontSize(9);
-    doc.text("Scan QR to verify agreement:", 140, 200);
-    doc.addImage(qrDataURL, "PNG", 140, 205, 40, 40);
-  }
-
-  doc.save(`KLCRS_Rental_Agreement_${agreementNumber}.pdf`);
-}
+document.getElementById("custName").textContent = params.get("name");
+document.getElementById("custPhone").textContent = params.get("phone");
+document.getElementById("custEmail").textContent = params.get("email");
+document.getElementById("custVehicle").textContent = params.get("vehicle");
+document.getElementById("custStart").textContent = params.get("startDate");
+document.getElementById("custEnd").textContent = params.get("endDate");
+document.getElementById("custPickup").textContent = params.get("pickup");
+document.getElementById("custDriver").textContent = params.get("driver");
 </script>
 
 </body>
 </html>
+
+    
+
+
+
+ 
+ 
+
+ 
+  
