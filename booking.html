@@ -120,18 +120,7 @@ document.getElementById("vehicleSelect").onchange = function() {
   }
 };
 </script>
-
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-<script src="ja/firebase.js"></script>
-  
-<!-- TEST FIRESTORE HERE -->
-<script>
-console.log("Firestore object:", firestore);
-</script>
-  
-<!-- Booking Save Script -->
+<!-- Booking Save Script (Modal Version) -->
 <script>
 document.getElementById("bookingForm").addEventListener("submit", function(e) {
   e.preventDefault();
@@ -157,28 +146,36 @@ document.getElementById("bookingForm").addEventListener("submit", function(e) {
     timestamp: new Date()
   })
   .then(() => {
-    alert("Your booking has been submitted successfully!");
-    window.location.href = "booking-confirmation.html";
+    // Show modal instead of alert
+    document.getElementById("successModal").style.display = "block";
   })
   .catch(err => {
     console.error("Booking save failed:", err);
     alert("Booking failed. Please check your Firebase connection.");
   });
 });
+
+// Close modal + continue
+document.querySelector(".close-btn").onclick = function() {
+  document.getElementById("successModal").style.display = "none";
+};
+
+document.getElementById("continueBtn").onclick = function() {
+  window.location.href = "booking-confirmation.html";
+};
 </script>
-<!-- Success Modal -->
-<div id="successModal" class="modal">
-  <div class="modal-content">
-    <span class="close-btn">&times;</span>
-    <h2>Booking Submitted</h2>
-    <p>Your booking has been submitted successfully!</p>
-    <button id="continueBtn" class="btn-primary">Continue</button>
-  </div>
-</div>
 
-</body>
-</html>
-
+  
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+<script src="ja/firebase.js"></script>
+  
+<!-- TEST FIRESTORE HERE -->
+<script>
+console.log("Firestore object:", firestore);
+</script>
+  
 
 </body>
 </html>
