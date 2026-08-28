@@ -131,6 +131,16 @@ document.getElementById("vehicleSelect").onchange = function() {
 console.log("Firestore object:", firestore);
 </script>
 
+<!-- Success Modal -->
+<div id="successModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <h2>Booking Submitted</h2>
+    <p>Your booking has been submitted successfully!</p>
+    <button id="continueBtn" class="btn-primary">Continue</button>
+  </div>
+</div>
+
 <!-- Booking Save Script (Modal Version) -->
 <script>
 document.getElementById("bookingForm").addEventListener("submit", function(e) {
@@ -165,27 +175,20 @@ document.getElementById("bookingForm").addEventListener("submit", function(e) {
   });
 });
 
-// Close modal
+// Close modal (X)
 document.querySelector(".close-btn").onclick = function() {
   document.getElementById("successModal").style.display = "none";
 };
 
+// Continue button (hide modal + redirect)
 document.getElementById("continueBtn").onclick = function () {
-    document.getElementById("successModal").style.display = "none";
-    window.location.href = "booking-confirmation.html";
+  document.getElementById("successModal").style.display = "none";
+  window.location.href = "booking-confirmation.html";
 };
-
 </script>
-
-<!-- Success Modal -->
-<div id="successModal" class="modal">
-  <div class="modal-content">
-    <span class="close-btn">&times;</span>
-    <h2>Booking Submitted</h2>
-    <p>Your booking has been submitted successfully!</p>
-    <button id="continueBtn" class="btn-primary">Continue</button>
-  </div>
-</div>
 
 </body>
 </html>
+
+
+
