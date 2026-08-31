@@ -161,6 +161,12 @@ document.getElementById("bookingForm").addEventListener("submit", function(e) {
     pickup: document.getElementById("pickupLocation").value,
     driver: document.getElementById("driverOption").value,
     timestamp: new Date()
+    };   
+    // Save ALL bookings for admin dashboard
+let allBookings = JSON.parse(localStorage.getItem("allBookings")) || [];
+allBookings.push(bookingData);
+localStorage.setItem("allBookings", JSON.stringify(allBookings));
+
   };
 
   firestore.collection("bookings").add(bookingData)
