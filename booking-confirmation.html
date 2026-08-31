@@ -146,6 +146,39 @@ async function downloadPDF() {
 
   pdf.save("KLCRS_Rental_Agreement.pdf");
 }
+  <script>
+function cancelBooking() {
+  const booking = JSON.parse(localStorage.getItem("lastBooking"));
+  if (!booking) return alert("No booking found.");
+
+  const bookingDate = new Date(booking.startDate);
+  const today = new Date();
+
+  const diffTime = bookingDate - today;
+  const diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+  if (diffDays >= 1) {
+    // Free cancellation
+    alert("Your booking has been cancelled. No fee applied (within 1-day grace period).");
+
+  } else {
+    // Administrative fee applies
+    alert("Your booking has been cancelled. An administrative fee of €10 will be charged.");
+  }
+
+  // Remove last booking
+  localStorage.removeItem("lastBooking");
+
+  // Remove from allBookings
+  let allBookings = JSON.parse(localStorage.getItem("allBookings")) || [];
+  allBookings = allBookings.filter(b => b.startDate !== booking.startDate || b.name !== booking.name);
+  localStorage.setItem("allBookings", JSON.stringify(allBookings));
+
+  // Redirect to homepage
+  window.location.href = "index.html";
+}
+</script>
+
 </script>
 
 </body>
