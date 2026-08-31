@@ -2,78 +2,170 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Admin Dashboard – KLCRS</title>
+  <title>Admin Booking Dashboard</title>
   <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .search-filter-box {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    input, select {
+      padding: 10px;
+      font-size: 16px;
+      width: 200px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+    }
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+
+    th {
+      background: #0047AB;
+      color: white;
+      cursor: pointer;
+    }
+
+    tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+  </style>
 </head>
 
 <body>
-<header>
-  <div class="logo">KLCRS Admin</div>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="fleet.html">Fleet</a>
-    <a href="booking.html">Booking</a>
-  </nav>
-</header>
 
-<section class="section">
-  <h2>Admin Booking Dashboard</h2>
-  <p>View and manage all incoming booking requests.</p>
+<h1>KLCRS Admin Booking Dashboard</h1>
 
-  <div class="admin-table">
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Phone</th>
-          <th>Vehicle</th>
-          <th>Start Date</th>
-          <th>End Date</th>
-          <th>Driver</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody id="bookingData">
-        <!-- Firebase entries will appear here -->
-      </tbody>
-    </table>
-  </div>
-</section>
+<div class="search-filter-box">
+  <input type="text" id="searchInput" placeholder="Search name, phone, email">
+  
+  <select id="vehicleFilter">
+    <option value="">All Vehicles</option>
+    <option value="Toyota Corolla">Toyota Corolla</option>
+    <option value="Toyota Camry">Toyota Camry</option>
+    <option value="Honda Civic">Honda Civic</option>
+    <option value="Mercedes C-Class">Mercedes C-Class</option>
+  </select>
 
-<footer>
-  © Kay Logistics Car Rental Service (KLCRS)
-</footer>
+  <select id="locationFilter">
+    <option value="">All Locations</option>
+    <option value="Inland">Inland</option>
+    <option value="Upland">Upland</option>
+  </select>
 
-<!-- Firebase Core Scripts -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-<script src="js/firebase.js"></script>
+  <select id="driverFilter">
+    <option value="">Driver Option</option>
+    <option value="With Driver">With Driver</option>
+    <option value="Self Drive">Self Drive</option>
+  </select>
+</div>
 
-<!-- Admin Dashboard Firebase Loader -->
+<table>
+  <thead>
+    <tr>
+      <th onclick="sortTable('name')">Name</th>
+      <th onclick="sortTable('vehicle')">Vehicle</th>
+      <th onclick="sortTable('location')">Location</th>
+      <th onclick="sortTable('startDate')">Start Date</th>
+      <th onclick="sortTable('endDate')">End Date</th>
+      <th onclick="sortTable('totalPrice')">Total Price</th>
+      <th>Phone</th>
+      <th>Email</th>
+      <th>Pickup</th>
+      <th>Driver</th>
+    </tr>
+  </thead>
+  <tbody id="bookingTableBody"></tbody>
+</table>
+
 <script>
-firestore.collection("bookings").orderBy("timestamp", "desc").onSnapshot(snapshot => {
-  const table = document.getElementById("bookingData");
-  table.innerHTML = "";
+  let bookings = JSON.parse(localStorage.getItem("allBookings")) || [];
 
-  snapshot.forEach(doc => {
-    const b = doc.data();
-    table.innerHTML += `
-      <tr>
-        <td>${b.name}</td>
-        <td>${b.phone}</td>
-        <td>${b.vehicle}</td>
-        <td>${b.startDate}</td>
-        <td>${b.endDate}</td>
-        <td>${b.driver}</td>
-        <td>Pending</td>
-      </tr>
-    `;
+  function loadBookings() {
+    const tbody = document.getElementById("bookingTableBody");
+    tbody.innerHTML = "";
+
+    bookings.forEach(b => {
+      const row = `
+        <tr>
+          <td>${b.name}</td>
+          <td>${b.vehicle}</td>
+          <td>${b.location}</td>
+          <td>${b.startDate}</td>
+          <td>${b.endDate}</td>
+          <td>${b.totalPrice}</td>
+          <td>${b.phone}</td>
+          <td>${b.email}</td>
+          <td>${b.pickup}</td>
+          <td>${b.driver}</td>
+        </tr>
+      `;
+      tbody.innerHTML += row;
+    });
+  }
+
+  function sortTable(key) {
+    bookings.sort((a, b) => {
+      if (key === "totalPrice") return Number(a[key]) - Number(b[key]);
+      return a[key].localeCompare(b[key]);
+    });
+    loadBookings();
+  }
+
+  document.getElementById("searchInput").addEventListener("input", function () {
+    const value = this.value.toLowerCase();
+    bookings = JSON.parse(localStorage.getItem("allBookings")) || [];
+    bookings = bookings.filter(b =>
+      b.name.toLowerCase().includes(value) ||
+      b.phone.toLowerCase().includes(value) ||
+      b.email.toLowerCase().includes(value)
+    );
+    loadBookings();
   });
-});
+
+  document.getElementById("vehicleFilter").addEventListener("change", function () {
+    const value = this.value;
+    bookings = JSON.parse(localStorage.getItem("allBookings")) || [];
+    if (value) bookings = bookings.filter(b => b.vehicle === value);
+    loadBookings();
+  });
+
+  document.getElementById("locationFilter").addEventListener("change", function () {
+    const value = this.value;
+    bookings = JSON.parse(localStorage.getItem("allBookings")) || [];
+    if (value) bookings = bookings.filter(b => b.location === value);
+    loadBookings();
+  });
+
+  document.getElementById("driverFilter").addEventListener("change", function () {
+    const value = this.value;
+    bookings = JSON.parse(localStorage.getItem("allBookings")) || [];
+    if (value) bookings = bookings.filter(b => b.driver === value);
+    loadBookings();
+  });
+
+  loadBookings();
 </script>
 
 </body>
 </html>
-
-     
