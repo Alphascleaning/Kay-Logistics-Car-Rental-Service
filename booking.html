@@ -22,25 +22,18 @@
 
 <section class="section">
   <h2>Book Your Vehicle</h2>
-  <p>Complete the form below to reserve your preferred vehicle. A confirmation will be sent after review.</p>
+  <p>Complete the form below to reserve your preferred vehicle.</p>
 
   <!-- Fuel Policy Box -->
   <div class="info-box fuel-box">
     <h3><i class="fa-solid fa-gas-pump"></i> Fuel Policy</h3>
-    <p>
-      All KLCRS vehicles come with <strong>reserve fuel</strong> at the start of the rental.<br>
-      Fuel is <strong>not included</strong> in the rental price.<br>
-      The vehicle must be returned with the <strong>same amount of reserve fuel</strong> provided at pickup.
-    </p>
+    <p>All KLCRS vehicles come with reserve fuel. Fuel is not included.</p>
   </div>
 
   <!-- Driver Responsibility Box -->
   <div class="info-box driver-box">
     <h3><i class="fa-solid fa-user-shield"></i> Driver Responsibility</h3>
-    <p>
-      If you choose to provide <strong>your own driver</strong>, you accept <strong>full responsibility</strong> for any damages caused during the rental period.<br>
-      KLCRS will not cover repair or maintenance costs resulting from renter‑provided drivers.
-    </p>
+    <p>If you provide your own driver, you accept full responsibility for damages.</p>
   </div>
 
   <!-- Booking Form -->
@@ -63,10 +56,17 @@
       <option>Nissan X-Trail (Diesel)</option>
     </select>
 
-    <!-- Automatic Price Box -->
-    <div id="priceBox" class="info-box price-box">
-      <h3><i class='fa-solid fa-money-bill'></i> Price</h3>
-      <p>Select a vehicle to view pricing.</p>
+    <!-- NEW LOCATION DROPDOWN + PRICE DISPLAY -->
+    <label for="location">Select Location</label>
+    <select id="location" name="location" required>
+      <option value="">-- Select --</option>
+      <option value="inland">Inland (€25/day)</option>
+      <option value="upland">Upland (€56/day)</option>
+    </select>
+
+    <div id="priceDisplay" class="info-box price-box">
+      <h3><i class="fa-solid fa-money-bill"></i> Daily Price</h3>
+      <p>€0/day</p>
     </div>
 
     <label>Rental Start Date</label>
@@ -74,6 +74,11 @@
 
     <label>Rental End Date</label>
     <input type="date" id="endDate" required>
+
+    <div id="totalPriceBox" class="info-box price-box">
+      <h3><i class="fa-solid fa-calculator"></i> Total Price</h3>
+      <p>€0</p>
+    </div>
 
     <label>Pickup Location</label>
     <input type="text" id="pickupLocation" required>
@@ -86,7 +91,6 @@
 
     <button type="submit" class="btn-primary">Submit Booking</button>
 
-    <!-- WhatsApp Booking Button -->
     <a href="https://wa.me/23276699658?text=Hello%20KLCRS,%20I%20would%20like%20to%20book%20a%20vehicle."
        class="btn-whatsapp">
        <i class="fa-brands fa-whatsapp"></i> Book via WhatsApp
@@ -99,26 +103,39 @@
   © Kay Logistics Car Rental Service (KLCRS)
 </footer>
 
-<!-- Automatic Price Calculation Script -->
+<!-- DAILY PRICE SCRIPT -->
 <script>
-const prices = {
-  "Mercedes-Benz ML 320 (Petrol)": { inland: 25, upland: 56 },
-  "Toyota Land Cruiser Prado (Diesel)": { inland: 25, upland: 56 },
-  "Nissan X-Trail (Diesel)": { inland: 25, upland: 56 }
-};
+document.getElementById("location").addEventListener("change", function() {
+  const priceDisplay = document.getElementById("priceDisplay").querySelector("p");
+  let price = (this.value === "inland") ? 25 : (this.value === "upland") ? 56 : 0;
+  priceDisplay.textContent = "€" + price + "/day";
+});
+</script>
 
-document.getElementById("vehicleSelect").onchange = function() {
-  const vehicle = this.value;
-  if (prices[vehicle]) {
-    const inland = prices[vehicle].inland;
-    const upland = prices[vehicle].upland;
+<!-- TOTAL PRICE SCRIPT -->
+<script>
+function calculateTotal() {
+  const location = document.getElementById("location").value;
+  const start = new Date(document.getElementById("startDate").value);
+  const end = new Date(document.getElementById("endDate").value);
 
-    document.getElementById("priceBox").innerHTML =
-      `<h3><i class='fa-solid fa-money-bill'></i> Price</h3>
-       <p><strong>Inland:</strong> €${inland}/day<br>
-       <strong>Upland:</strong> €${upland}/day</p>`;
-  }
-};
+  if (!location || isNaN(start) || isNaN(end)) return 0;
+
+  const daily = (location === "inland") ? 25 : 56;
+  const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+
+  return days > 0 ? daily * days : 0;
+}
+
+document.getElementById("endDate").addEventListener("change", () => {
+  document.querySelector("#totalPriceBox p").textContent = "€" + calculateTotal();
+});
+document.getElementById("startDate").addEventListener("change", () => {
+  document.querySelector("#totalPriceBox p").textContent = "€" + calculateTotal();
+});
+document.getElementById("location").addEventListener("change", () => {
+  document.querySelector("#totalPriceBox p").textContent = "€" + calculateTotal();
+});
 </script>
 
 <!-- Firebase -->
@@ -126,69 +143,34 @@ document.getElementById("vehicleSelect").onchange = function() {
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 <script src="ja/firebase.js"></script>
 
-<!-- TEST FIRESTORE -->
-<script>
-console.log("Firestore object:", firestore);
-</script>
-
-<!-- Success Modal -->
-<div id="successModal" class="modal">
-  <div class="modal-content">
-    <span class="close-btn">&times;</span>
-    <h2>Booking Submitted</h2>
-    <p>Your booking has been submitted successfully!</p>
-    <button id="continueBtn" class="btn-primary">Continue</button>
-  </div>
-</div>
-
-<!-- Booking Save Script (Modal Version) -->
+<!-- Save Booking -->
 <script>
 document.getElementById("bookingForm").addEventListener("submit", function(e) {
   e.preventDefault();
 
-  const name = document.getElementById("fullName").value;
-  const phone = document.getElementById("phoneNumber").value;
-  const email = document.getElementById("emailAddress").value;
-  const vehicle = document.getElementById("vehicleSelect").value;
-  const startDate = document.getElementById("startDate").value;
-  const endDate = document.getElementById("endDate").value;
-  const pickup = document.getElementById("pickupLocation").value;
-  const driver = document.getElementById("driverOption").value;
-
-  firestore.collection("bookings").add({
-    name,
-    phone,
-    email,
-    vehicle,
-    startDate,
-    endDate,
-    pickup,
-    driver,
+  const bookingData = {
+    name: document.getElementById("fullName").value,
+    phone: document.getElementById("phoneNumber").value,
+    email: document.getElementById("emailAddress").value,
+    vehicle: document.getElementById("vehicleSelect").value,
+    location: document.getElementById("location").value,
+    dailyPrice: document.getElementById("priceDisplay").querySelector("p").textContent,
+    totalPrice: document.querySelector("#totalPriceBox p").textContent,
+    startDate: document.getElementById("startDate").value,
+    endDate: document.getElementById("endDate").value,
+    pickup: document.getElementById("pickupLocation").value,
+    driver: document.getElementById("driverOption").value,
     timestamp: new Date()
-  })
-  .then(() => {
-    document.getElementById("successModal").style.display = "block";
-  })
-  .catch(err => {
-    console.error("Booking save failed:", err);
-    alert("Booking failed. Please check your Firebase connection.");
-  });
+  };
+
+  firestore.collection("bookings").add(bookingData)
+    .then(() => {
+      localStorage.setItem("lastBooking", JSON.stringify(bookingData));
+      window.location.href = "booking-confirmation.html";
+    })
+    .catch(err => alert("Booking failed: " + err));
 });
-
-// Close modal (X)
-document.querySelector(".close-btn").onclick = function() {
-  document.getElementById("successModal").style.display = "none";
-};
-
-// Continue button (hide modal + redirect)
-document.getElementById("continueBtn").onclick = function () {
-  document.getElementById("successModal").style.display = "none";
-  window.location.href = "booking-confirmation.html";
-};
 </script>
 
 </body>
 </html>
-
-
-
