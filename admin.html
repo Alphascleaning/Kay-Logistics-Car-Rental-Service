@@ -25,20 +25,22 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
   </script>
-<script>
-  function showLoggedInUser() {
-    const email = localStorage.getItem("klcrsUserEmail");
-    const role = localStorage.getItem("klcrsUserRole");
 
-    if (!email || !role) {
-      document.getElementById("userStatus").innerHTML = "Not logged in";
-      return;
+  <!-- ⭐ Logged-in user display function -->
+  <script>
+    function showLoggedInUser() {
+      const email = localStorage.getItem("klcrsUserEmail");
+      const role = localStorage.getItem("klcrsUserRole");
+
+      if (!email || !role) {
+        document.getElementById("userStatus").innerHTML = "Not logged in";
+        return;
+      }
+
+      document.getElementById("userStatus").innerHTML =
+        `Logged in as: <strong>${email}</strong> (${role})`;
     }
-
-    document.getElementById("userStatus").innerHTML =
-      `Logged in as: <strong>${email}</strong> (${role})`;
-  }
-</script>
+  </script>
 
   <!-- ⭐ ADMIN‑ONLY PROTECTION -->
   <script>
@@ -46,14 +48,23 @@
       const role = localStorage.getItem("klcrsUserRole");
 
       if (role !== "admin") {
-        // Optional stop sound
-        // const audio = new Audio("assets/sounds/no-access.mp3");
-        // audio.play();
-
         alert("Access denied. Admin / Worker only.");
         window.location.href = "index.html";
       }
     });
+  </script>
+
+  <!-- ⭐ Logout function -->
+  <script>
+    function logoutUser() {
+      auth.signOut().then(() => {
+        localStorage.removeItem("klcrsUserRole");
+        localStorage.removeItem("klcrsUserEmail");
+
+        alert("Logged out successfully.");
+        window.location.href = "login.html";
+      });
+    }
   </script>
 
   <style>
@@ -65,7 +76,18 @@
 
     h1 {
       text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .logout-btn {
+      display: inline-block;
       margin-bottom: 20px;
+      padding: 10px 15px;
+      background: #0047AB;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
     }
 
     .search-filter-box {
@@ -107,7 +129,12 @@
 <body>
 
 <h1>KLCRS Admin Booking Dashboard</h1>
+
+<!-- ⭐ Logged-in user display -->
 <div id="userStatus" style="padding:10px; font-size:14px; color:#0047AB;"></div>
+
+<!-- ⭐ Logout button -->
+<button class="logout-btn" onclick="logoutUser()">Logout</button>
 
 <div class="search-filter-box">
   <input type="text" id="searchInput" placeholder="Search name, phone, email">
@@ -219,6 +246,8 @@
 
   loadBookings();
 </script>
+
+<!-- ⭐ Activate logged-in user display -->
 <script>
   showLoggedInUser();
 </script>
