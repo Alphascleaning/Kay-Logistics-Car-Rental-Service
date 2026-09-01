@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Admin Booking Dashboard – KLCRS</title>
+  <title>Admin Dashboard – KLCRS</title>
   <link rel="stylesheet" href="assets/css/style.css">
 
-  <!-- ⭐ Firebase SDKs -->
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
-  <!-- ⭐ Firebase Config -->
+  <!-- Firebase Config -->
   <script>
     const firebaseConfig = {
       apiKey: "YOUR_API_KEY",
@@ -26,230 +26,114 @@
     const db = firebase.firestore();
   </script>
 
-  <!-- ⭐ Logged-in user display function -->
+  <!-- Logout Function -->
   <script>
-    function showLoggedInUser() {
-      const email = localStorage.getItem("klcrsUserEmail");
-      const role = localStorage.getItem("klcrsUserRole");
-
-      if (!email || !role) {
-        document.getElementById("userStatus").innerHTML = "Not logged in";
-        return;
-      }
-
-      document.getElementById("userStatus").innerHTML =
-        `Logged in as: <strong>${email}</strong> (${role})`;
+    function logoutUser() {
+      auth.signOut().then(() => {
+        localStorage.removeItem("klcrsUserRole");
+        localStorage.removeItem("klcrsUserEmail");
+        alert("You have been logged out.");
+        window.location.href = "index.html";
+      });
     }
   </script>
 
-  <!-- ⭐ ADMIN‑ONLY PROTECTION -->
+  <!-- Admin Protection -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const role = localStorage.getItem("klcrsUserRole");
 
-      if (role !== "admin") {
+      if (role !== "admin" && role !== "worker") {
         alert("Access denied. Admin / Worker only.");
         window.location.href = "index.html";
       }
     });
   </script>
 
-  <!-- ⭐ Logout function -->
-  <script>
-    function logoutUser() {
-      auth.signOut().then(() => {
-        localStorage.removeItem("klcrsUserRole");
-        localStorage.removeItem("klcrsUserEmail");
-
-        alert("Logged out successfully.");
-        window.location.href = "login.html";
-      });
-    }
-  </script>
-
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      padding: 20px;
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 10px;
-    }
-
-    .logout-btn {
-      display: inline-block;
-      margin-bottom: 20px;
-      padding: 10px 15px;
-      background: #0047AB;
-      color: white;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-
-    .search-filter-box {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    input, select {
-      padding: 10px;
-      font-size: 16px;
-      width: 200px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-    }
-
-    th, td {
-      padding: 12px;
-      border: 1px solid #ccc;
-      text-align: left;
-    }
-
-    th {
-      background: #0047AB;
-      color: white;
-      cursor: pointer;
-    }
-
-    tr:nth-child(even) {
-      background: #f9f9f9;
-    }
-  </style>
 </head>
 
 <body>
 
-<h1>KLCRS Admin Booking Dashboard</h1>
+<header>
+  <div class="logo">KLCRS</div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="fleet.html">Fleet</a>
+    <a href="booking.html">Booking</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="register.html">Sign Up</a>
+    <a href="admin.html">Admin</a>
+  </nav>
+</header>
 
-<!-- ⭐ Logged-in user display -->
-<div id="userStatus" style="padding:10px; font-size:14px; color:#0047AB;"></div>
-
-<!-- ⭐ Logout button -->
-<button class="logout-btn" onclick="logoutUser()">Logout</button>
-
-<div class="search-filter-box">
-  <input type="text" id="searchInput" placeholder="Search name, phone, email">
-  
-  <select id="vehicleFilter">
-    <option value="">All Vehicles</option>
-    <option value="Toyota Corolla">Toyota Corolla</option>
-    <option value="Toyota Camry">Toyota Camry</option>
-    <option value="Honda Civic">Honda Civic</option>
-    <option value="Mercedes C-Class">Mercedes C-Class</option>
-  </select>
-
-  <select id="locationFilter">
-    <option value="">All Locations</option>
-    <option value="Inland">Inland</option>
-    <option value="Upland">Upland</option>
-  </select>
-
-  <select id="driverFilter">
-    <option value="">Driver Option</option>
-    <option value="With Driver">With Driver</option>
-    <option value="Self Drive">Self Drive</option>
-  </select>
+<!-- Full Login Bar -->
+<div class="login-bar" style="padding:15px; background:#eef3ff; border-bottom:1px solid #ccc;">
+  <form id="inlineLoginForm" style="display:flex; gap:10px; align-items:center;">
+    <input type="email" id="inlineEmail" placeholder="Email" required style="padding:8px; width:200px;">
+    <input type="password" id="inlinePassword" placeholder="Password" required style="padding:8px; width:200px;">
+    <button type="submit" style="padding:8px 15px; background:#0047AB; color:white; border:none;">Login</button>
+  </form>
 </div>
 
-<table>
-  <thead>
-    <tr>
-      <th onclick="sortTable('name')">Name</th>
-      <th onclick="sortTable('vehicle')">Vehicle</th>
-      <th onclick="sortTable('location')">Location</th>
-      <th onclick="sortTable('startDate')">Start Date</th>
-      <th onclick="sortTable('endDate')">End Date</th>
-      <th onclick="sortTable('totalPrice')">Total Price</th>
-      <th>Phone</th>
-      <th>Email</th>
-      <th>Pickup</th>
-      <th>Driver</th>
-    </tr>
-  </thead>
-  <tbody id="bookingTableBody"></tbody>
-</table>
+<!-- Create Account Link -->
+<div style="padding:10px;">
+  <a href="register.html" style="color:#0047AB;">Create an account</a>
+</div>
+
+<!-- Logged-in user display -->
+<div id="userStatus" style="padding:10px; font-size:14px; color:#0047AB;"></div>
+
+<!-- Logout Button -->
+<button onclick="logoutUser()" 
+        style="padding:8px 15px; background:#0047AB; color:white; border:none; margin:10px;">
+  Logout
+</button>
+
+<h1>Admin Dashboard</h1>
+
+<section class="admin-section">
+
+  <h2>All Bookings</h2>
+  <table id="bookingTable" border="1" cellpadding="10" style="width:100%; border-collapse:collapse;">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Email</th>
+        <th>Vehicle</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Pickup</th>
+        <th>Driver</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+</section>
 
 <script>
-  let bookings = JSON.parse(localStorage.getItem("allBookings")) || [];
+// Load all bookings
+document.addEventListener("DOMContentLoaded", () => {
+  const allBookings = JSON.parse(localStorage.getItem("allBookings")) || [];
+  const tableBody = document.querySelector("#bookingTable tbody");
 
-  function loadBookings() {
-    const tbody = document.getElementById("bookingTableBody");
-    tbody.innerHTML = "";
-
-    bookings.forEach(b => {
-      const row = `
-        <tr>
-          <td>${b.name}</td>
-          <td>${b.vehicle}</td>
-          <td>${b.location}</td>
-          <td>${b.startDate}</td>
-          <td>${b.endDate}</td>
-          <td>${b.totalPrice}</td>
-          <td>${b.phone}</td>
-          <td>${b.email}</td>
-          <td>${b.pickup}</td>
-          <td>${b.driver}</td>
-        </tr>
-      `;
-      tbody.innerHTML += row;
-    });
-  }
-
-  function sortTable(key) {
-    bookings.sort((a, b) => {
-      if (key === "totalPrice") return Number(a[key]) - Number(b[key]);
-      return a[key].localeCompare(b[key]);
-    });
-    loadBookings();
-  }
-
-  document.getElementById("searchInput").addEventListener("input", function () {
-    const value = this.value.toLowerCase();
-    bookings = JSON.parse(localStorage.getItem("allBookings")) || [];
-    bookings = bookings.filter(b =>
-      b.name.toLowerCase().includes(value) ||
-      b.phone.toLowerCase().includes(value) ||
-      b.email.toLowerCase().includes(value)
-    );
-    loadBookings();
+  allBookings.forEach(b => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${b.name}</td>
+      <td>${b.phone}</td>
+      <td>${b.email}</td>
+      <td>${b.vehicle}</td>
+      <td>${b.startDate}</td>
+      <td>${b.endDate}</td>
+      <td>${b.pickup}</td>
+      <td>${b.driver}</td>
+    `;
+    tableBody.appendChild(row);
   });
-
-  document.getElementById("vehicleFilter").addEventListener("change", function () {
-    const value = this.value;
-    bookings = JSON.parse(localStorage.getItem("allBookings")) || [];
-    if (value) bookings = bookings.filter(b => b.vehicle === value);
-    loadBookings();
-  });
-
-  document.getElementById("locationFilter").addEventListener("change", function () {
-    const value = this.value;
-    bookings = JSON.parse(localStorage.getItem("allBookings")) || [];
-    if (value) bookings = bookings.filter(b => b.location === value);
-    loadBookings();
-  });
-
-  document.getElementById("driverFilter").addEventListener("change", function () {
-    const value = this.value;
-    bookings = JSON.parse(localStorage.getItem("allBookings")) || [];
-    if (value) bookings = bookings.filter(b => b.driver === value);
-    loadBookings();
-  });
-
-  loadBookings();
-</script>
-
-<!-- ⭐ Activate logged-in user display -->
-<script>
-  showLoggedInUser();
+});
 </script>
 
 </body>
