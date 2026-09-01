@@ -2,229 +2,102 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Our Fleet – KLCRS</title>
+  <title>Fleet – KLCRS</title>
   <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      padding: 20px;
-    }
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
-    h1 {
-      text-align: center;
-      margin-bottom: 30px;
-      font-size: 32px;
-      color: #0047AB;
-    }
+  <!-- Firebase Config -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
 
-    .fleet-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 25px;
-    }
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+  </script>
 
-    .fleet-card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+  <!-- Admin Link Protection -->
+  <script>
+    function goAdmin() {
+      const role = localStorage.getItem("klcrsUserRole");
+      if (role !== "admin" && role !== "worker") {
+        alert("Access denied. Admin / Worker only.");
+        return;
+      }
+      window.location.href = "admin.html";
     }
+  </script>
 
-    .fleet-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 8px 18px rgba(0,0,0,0.15);
-    }
-
-    .fleet-car {
-      width: 100%;
-      border-radius: 10px;
-      margin-bottom: 12px;
-    }
-
-    .fleet-title {
-      font-size: 22px;
-      font-weight: bold;
-      margin-bottom: 8px;
-      color: #000;
-    }
-
-    .fleet-specs {
-      font-size: 15px;
-      color: #444;
-      margin-bottom: 10px;
-    }
-
-    .fleet-desc {
-      font-size: 15px;
-      margin-bottom: 10px;
-      color: #333;
-    }
-
-    .fleet-price {
-      font-size: 16px;
-      font-weight: bold;
-      margin-bottom: 10px;
-      color: #0047AB;
-    }
-
-    .btn {
-      padding: 10px 18px;
-      background: #0047AB;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 15px;
-      margin-right: 10px;
-      margin-top: 8px;
-    }
-
-    .btn:hover {
-      background: #003b8a;
-    }
-  </style>
 </head>
 
 <body>
 
+<header>
+  <div class="logo">KLCRS</div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="fleet.html">Fleet</a>
+    <a href="booking.html">Booking</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="register.html">Sign Up</a>
+    <a href="#" onclick="goAdmin()">Admin</a>
+  </nav>
+</header>
+
 <h1>Our Fleet</h1>
 
-<div class="fleet-grid">
+<section class="fleet-section">
 
-  <!-- ML 320 -->
-  <div class="fleet-card">
-    <img src="assets/img/ml320.jpg" alt="Mercedes-Benz ML 320" class="fleet-car">
-    <div class="fleet-title">Mercedes-Benz ML 320 (2001)</div>
-    <div class="fleet-specs">4x4 • Automatic • Petrol • GPS</div>
-    <div class="fleet-desc">
-      Comfortable 4x4 jeep suitable for inland and upland routes.
-    </div>
-    <div class="fleet-price">
-      Inland: €25/day — Upland: €56/day<br>
-      Fuel Type: Petrol
-    </div>
-    <button class="btn" onclick="viewDetails('ML 320')">View Details</button>
-    <button class="btn" onclick="bookVehicle('ML 320')">Book Now</button>
-    <button class="btn" onclick="checkAvailability('ML 320')">Check Availability</button>
+  <!-- Vehicle 1 -->
+  <div class="vehicle-card">
+    <h3>Mercedes-Benz ML 320</h3>
+    <p>Strong SUV for inland and upland routes.</p>
+    <button onclick="selectVehicle('ML 320')">Book Now</button>
   </div>
 
-  <!-- Prado -->
-  <div class="fleet-card">
-    <img src="assets/img/prado.jpg" alt="Toyota Land Cruiser Prado" class="fleet-car">
-    <div class="fleet-title">Toyota Land Cruiser Prado</div>
-    <div class="fleet-specs">4x4 • Long Distance • Diesel • GPS</div>
-    <div class="fleet-desc">
-      Reliable SUV for long-distance travel and province routes.
-    </div>
-    <div class="fleet-price">
-      Inland: €25/day — Upland: €56/day<br>
-      Fuel Type: Diesel
-    </div>
-    <button class="btn" onclick="viewDetails('Prado')">View Details</button>
-    <button class="btn" onclick="bookVehicle('Prado')">Book Now</button>
-    <button class="btn" onclick="checkAvailability('Prado')">Check Availability</button>
+  <!-- Vehicle 2 -->
+  <div class="vehicle-card">
+    <h3>Toyota Land Cruiser Prado</h3>
+    <p>Reliable jeep for long-distance travel.</p>
+    <button onclick="selectVehicle('Prado')">Book Now</button>
   </div>
 
-  <!-- X-Trail -->
-  <div class="fleet-card">
-    <img src="assets/img/xtrail.jpg" alt="Nissan X-Trail" class="fleet-car">
-    <div class="fleet-title">Nissan X-Trail</div>
-    <div class="fleet-specs">Compact SUV • City Trips • Diesel • GPS</div>
-    <div class="fleet-desc">
-      Perfect for city trips and short-distance travel.
-    </div>
-    <div class="fleet-price">
-      Inland: €25/day — Upland: €56/day<br>
-      Fuel Type: Diesel
-    </div>
-    <button class="btn" onclick="viewDetails('X-Trail')">View Details</button>
-    <button class="btn" onclick="bookVehicle('X-Trail')">Book Now</button>
-    <button class="btn" onclick="checkAvailability('X-Trail')">Check Availability</button>
+  <!-- Vehicle 3 -->
+  <div class="vehicle-card">
+    <h3>Nissan X-Trail</h3>
+    <p>Comfortable and fuel-efficient.</p>
+    <button onclick="selectVehicle('X-Trail')">Book Now</button>
   </div>
 
-</div>
+</section>
 
 <script>
-function viewDetails(vehicle) {
-  alert("Vehicle details for: " + vehicle + "\n(You can replace this with a modal later)");
-}
+function selectVehicle(vehicleName) {
+  const role = localStorage.getItem("klcrsUserRole");
 
-function bookVehicle(vehicle) {
-  localStorage.setItem("selectedVehicle", vehicle);
-  window.location.href = "booking.html";
-}
-</script>
-
-<!-- ⭐ AVAILABILITY MODAL -->
-<div id="availabilityModal" style="
-  display:none; position:fixed; top:0; left:0; width:100%; height:100%;
-  background:rgba(0,0,0,0.6); justify-content:center; align-items:center;">
-  
-  <div style="background:white; padding:20px; border-radius:10px; width:350px;">
-    <h2 id="calendarTitle"></h2>
-    <div id="calendar"></div>
-    <button class="btn" onclick="closeCalendar()">Close</button>
-  </div>
-
-</div>
-
-<!-- ⭐ AVAILABILITY CALENDAR LOGIC -->
-<script>
-function checkAvailability(vehicle) {
-  document.getElementById("calendarTitle").textContent = vehicle + " Availability";
-
-  const availability = JSON.parse(localStorage.getItem("availability")) || {};
-  const bookedDates = availability[vehicle] || [];
-
-  const calendarDiv = document.getElementById("calendar");
-  calendarDiv.innerHTML = "";
-
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth();
-
-  const lastDay = new Date(year, month + 1, 0);
-
-  for (let d = 1; d <= lastDay.getDate(); d++) {
-    const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-
-    const dayBox = document.createElement("div");
-    dayBox.style.padding = "8px";
-    dayBox.style.margin = "3px";
-    dayBox.style.display = "inline-block";
-    dayBox.style.width = "40px";
-    dayBox.style.textAlign = "center";
-    dayBox.style.borderRadius = "6px";
-    dayBox.style.cursor = "pointer";
-
-    if (bookedDates.includes(dateStr)) {
-      dayBox.style.background = "#ff4d4d"; // red
-      dayBox.style.color = "white";
-      dayBox.textContent = d;
-    } else {
-      dayBox.style.background = "#4CAF50"; // green
-      dayBox.style.color = "white";
-      dayBox.textContent = d;
-
-      dayBox.onclick = () => {
-        localStorage.setItem("selectedVehicle", vehicle);
-        localStorage.setItem("selectedDate", dateStr);
-        window.location.href = "booking.html";
-      };
-    }
-
-    calendarDiv.appendChild(dayBox);
+  // If not logged in → redirect to signup
+  if (!role || role !== "customer") {
+    alert("Please sign up or log in as a customer to book a vehicle.");
+    window.location.href = "register.html";
+    return;
   }
 
-  document.getElementById("availabilityModal").style.display = "flex";
-}
+  // Save selected vehicle
+  localStorage.setItem("selectedVehicle", vehicleName);
 
-function closeCalendar() {
-  document.getElementById("availabilityModal").style.display = "none";
+  // Redirect to booking page
+  window.location.href = "booking.html";
 }
 </script>
 
