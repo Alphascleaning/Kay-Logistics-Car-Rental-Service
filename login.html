@@ -1,1 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login – KLCRS</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- ⭐ Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+    <!-- ⭐ Firebase Config -->
+    <script>
+      const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_PROJECT_ID.appspot.com",
+        messagingSenderId: "YOUR_SENDER_ID",
+        appId: "YOUR_APP_ID"
+      };
+
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const db = firebase.firestore();
+    </script>
+
+</head>
+
+<body>
+
+<h1>Login to KLCRS</h1>
+
+<form id="loginForm">
+
+    <label>Email:</label>
+    <input type="email" id="logEmail" required>
+
+    <label>Password:</label>
+    <input type="password" id="logPassword" required>
+
+    <button type="submit">Login</button>
+
+</form>
+
+<script>
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById("logEmail").value;
+    const password = document.getElementById("logPassword").value;
+
+    try {
+        // Login user
+        const userCred = await auth.signInWithEmailAndPassword(email, password);
+        const uid = userCred.user.uid;
+
+        // Fetch role from Firestore
+        const doc = await db.collection("users").doc(uid).get();
+        const data = doc.data();
+
+        // Store role + email locally
+        localStorage.setItem("klcrsUserRole", data.role);
+        localStorage.setItem("klcrsUserEmail", data.email);
+
+        alert("Logged in as " + data.role);
+
+        // Redirect to homepage
+        window.location.href = "index.html";
+
+    } catch (err) {
+        alert("Login error: " + err.message);
+    }
+});
+</script>
+
+</body>
+</html>
 
