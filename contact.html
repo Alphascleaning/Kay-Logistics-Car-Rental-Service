@@ -78,7 +78,6 @@ document.getElementById("contactForm").addEventListener("submit", function(e) {
   const subject = document.getElementById("subject").value;
   const message = document.getElementById("message").value;
 
-  // Send to backend (email sending)
   fetch("send-email.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
