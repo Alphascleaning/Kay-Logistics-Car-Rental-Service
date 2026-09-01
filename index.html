@@ -25,6 +25,21 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
   </script>
+  <script>
+  function showLoggedInUser() {
+    const email = localStorage.getItem("klcrsUserEmail");
+    const role = localStorage.getItem("klcrsUserRole");
+
+    if (!email || !role) {
+      document.getElementById("userStatus").innerHTML = "Not logged in";
+      return;
+    }
+
+    document.getElementById("userStatus").innerHTML =
+      `Logged in as: <strong>${email}</strong> (${role})`;
+  }
+</script>
+
 
   <!-- ⭐ ADMIN LINK PROTECTION -->
   <script>
