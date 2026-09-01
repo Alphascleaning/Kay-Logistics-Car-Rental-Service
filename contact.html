@@ -18,7 +18,6 @@
     <a href="contact.html">Contact</a>
     <a href="admin.html">Admin</a>
     <a href="register.html">Sign Up</a>
-
   </nav>
 </header>
 
@@ -44,18 +43,19 @@
     <!-- Contact Form -->
     <div class="contact-card">
       <h3><i class="fa-solid fa-envelope"></i> Send Us a Message</h3>
-      <form class="contact-form">
+
+      <form id="contactForm" class="contact-form">
         <label>Your Name</label>
-        <input type="text" required>
+        <input type="text" id="name" required>
 
         <label>Your Email</label>
-        <input type="email" required>
+        <input type="email" id="email" required>
 
         <label>Subject</label>
-        <input type="text" required>
+        <input type="text" id="subject" required>
 
         <label>Message</label>
-        <textarea rows="5" required></textarea>
+        <textarea id="message" rows="5" required></textarea>
 
         <button type="submit" class="btn-primary">Send Message</button>
       </form>
@@ -68,6 +68,32 @@
   © Kay Logistics Car Rental Service (KLCRS)
 </footer>
 
+<!-- ⭐ Popup + Email Sending Script -->
+<script>
+document.getElementById("contactForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+  const subject = document.getElementById("subject").value;
+  const message = document.getElementById("message").value;
+
+  // Send to backend (email sending)
+  fetch("send-email.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, email, subject, message })
+  })
+  .then(res => res.text())
+  .then(data => {
+    alert("Your message has been sent successfully.");
+    document.getElementById("contactForm").reset();
+  })
+  .catch(err => {
+    alert("Error sending message. Please try again.");
+  });
+});
+</script>
+
 </body>
 </html>
-
