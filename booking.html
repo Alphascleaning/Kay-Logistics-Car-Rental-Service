@@ -2,179 +2,94 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>KLCRS Booking</title>
+  <title>Booking – KLCRS</title>
   <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body>
-<header>
-  <div class="logo">KLCRS</div>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="fleet.html">Fleet</a>
-    <a href="booking.html">Booking</a>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-    <a href="admin.html">Admin</a>
-  </nav>
-</header>
 
-<section class="section">
-  <h2>Book Your Vehicle</h2>
-  <p>Complete the form below to reserve your preferred vehicle.</p>
+<h1>Complete Your Booking</h1>
 
-  <!-- Fuel Policy Box -->
-  <div class="info-box fuel-box">
-    <h3><i class="fa-solid fa-gas-pump"></i> Fuel Policy</h3>
-    <p>All KLCRS vehicles come with reserve fuel. Fuel is not included.</p>
-  </div>
+<form id="bookingForm">
 
-  <!-- Driver Responsibility Box -->
-  <div class="info-box driver-box">
-    <h3><i class="fa-solid fa-user-shield"></i> Driver Responsibility</h3>
-    <p>If you provide your own driver, you accept full responsibility for damages.</p>
-  </div>
+  <label>Name:</label>
+  <input type="text" id="name" required>
 
-  <!-- Booking Form -->
-  <form id="bookingForm" class="booking-form">
+  <label>Phone:</label>
+  <input type="text" id="phone" required>
 
-    <label>Full Name</label>
-    <input type="text" id="fullName" required>
+  <label>Email:</label>
+  <input type="email" id="email" required>
 
-    <label>Phone Number</label>
-    <input type="text" id="phoneNumber" required>
+  <label>Vehicle:</label>
+  <input type="text" id="vehicle" readonly>
 
-    <label>Email</label>
-    <input type="email" id="emailAddress" required>
+  <label>Start Date:</label>
+  <input type="date" id="startDate" required>
 
-    <label>Select Vehicle</label>
-    <select id="vehicleSelect" name="vehicle" required>
-      <option value="">Choose a vehicle</option>
-      <option>Mercedes-Benz ML 320 (Petrol)</option>
-      <option>Toyota Land Cruiser Prado (Diesel)</option>
-      <option>Nissan X-Trail (Diesel)</option>
-    </select>
+  <label>End Date:</label>
+  <input type="date" id="endDate" required>
 
-    <!-- NEW LOCATION DROPDOWN + PRICE DISPLAY -->
-    <label for="location">Select Location</label>
-    <select id="location" name="location" required>
-      <option value="">-- Select --</option>
-      <option value="inland">Inland (€25/day)</option>
-      <option value="upland">Upland (€56/day)</option>
-    </select>
+  <label>Pickup Location:</label>
+  <input type="text" id="pickup" required>
 
-    <div id="priceDisplay" class="info-box price-box">
-      <h3><i class="fa-solid fa-money-bill"></i> Daily Price</h3>
-      <p>€0/day</p>
-    </div>
+  <label>Driver Option:</label>
+  <select id="driver">
+    <option value="Self Drive">Self Drive</option>
+    <option value="With Driver">With Driver</option>
+  </select>
 
-    <label>Rental Start Date</label>
-    <input type="date" id="startDate" required>
+  <button type="submit">Confirm Booking</button>
 
-    <label>Rental End Date</label>
-    <input type="date" id="endDate" required>
+</form>
 
-    <div id="totalPriceBox" class="info-box price-box">
-      <h3><i class="fa-solid fa-calculator"></i> Total Price</h3>
-      <p>€0</p>
-    </div>
-
-    <label>Pickup Location</label>
-    <input type="text" id="pickupLocation" required>
-
-    <label>Do you provide your own driver?</label>
-    <select id="driverOption" required>
-      <option value="No">No — KLCRS driver</option>
-      <option value="Yes">Yes — I provide my own driver</option>
-    </select>
-
-    <button type="submit" class="btn-primary">Submit Booking</button>
-
-    <a href="https://wa.me/23276699658?text=Hello%20KLCRS,%20I%20would%20like%20to%20book%20a%20vehicle."
-       class="btn-whatsapp">
-       <i class="fa-brands fa-whatsapp"></i> Book via WhatsApp
-    </a>
-
-  </form>
-</section>
-
-<footer>
-  © Kay Logistics Car Rental Service (KLCRS)
-</footer>
-
-<!-- DAILY PRICE SCRIPT -->
 <script>
-document.getElementById("location").addEventListener("change", function() {
-  const priceDisplay = document.getElementById("priceDisplay").querySelector("p");
-  let price = (this.value === "inland") ? 25 : (this.value === "upland") ? 56 : 0;
-  priceDisplay.textContent = "€" + price + "/day";
-});
-</script>
+// Auto-fill selected vehicle + date from fleet page
+document.getElementById("vehicle").value = localStorage.getItem("selectedVehicle") || "";
+document.getElementById("startDate").value = localStorage.getItem("selectedDate") || "";
 
-<!-- TOTAL PRICE SCRIPT -->
-<script>
-function calculateTotal() {
-  const location = document.getElementById("location").value;
-  const start = new Date(document.getElementById("startDate").value);
-  const end = new Date(document.getElementById("endDate").value);
-
-  if (!location || isNaN(start) || isNaN(end)) return 0;
-
-  const daily = (location === "inland") ? 25 : 56;
-  const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
-
-  return days > 0 ? daily * days : 0;
-}
-
-document.getElementById("endDate").addEventListener("change", () => {
-  document.querySelector("#totalPriceBox p").textContent = "€" + calculateTotal();
-});
-document.getElementById("startDate").addEventListener("change", () => {
-  document.querySelector("#totalPriceBox p").textContent = "€" + calculateTotal();
-});
-document.getElementById("location").addEventListener("change", () => {
-  document.querySelector("#totalPriceBox p").textContent = "€" + calculateTotal();
-});
-</script>
-
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-<script src="ja/firebase.js"></script>
-
-<!-- Save Booking -->
-<script>
+// Submit booking
 document.getElementById("bookingForm").addEventListener("submit", function(e) {
   e.preventDefault();
 
-  const bookingData = {
-    name: document.getElementById("fullName").value,
-    phone: document.getElementById("phoneNumber").value,
-    email: document.getElementById("emailAddress").value,
-    vehicle: document.getElementById("vehicleSelect").value,
-    location: document.getElementById("location").value,
-    dailyPrice: document.getElementById("priceDisplay").querySelector("p").textContent,
-    totalPrice: document.querySelector("#totalPriceBox p").textContent,
-    startDate: document.getElementById("startDate").value,
-    endDate: document.getElementById("endDate").value,
-    pickup: document.getElementById("pickupLocation").value,
-    driver: document.getElementById("driverOption").value,
-    timestamp: new Date()
-    };   
-    // Save ALL bookings for admin dashboard
-let allBookings = JSON.parse(localStorage.getItem("allBookings")) || [];
-allBookings.push(bookingData);
-localStorage.setItem("allBookings", JSON.stringify(allBookings));
+  const name = document.getElementById("name").value;
+  const phone = document.getElementById("phone").value;
+  const email = document.getElementById("email").value;
+  const vehicle = document.getElementById("vehicle").value;
+  const startDate = document.getElementById("startDate").value;
+  const endDate = document.getElementById("endDate").value;
+  const pickup = document.getElementById("pickup").value;
+  const driver = document.getElementById("driver").value;
 
+  const bookingData = {
+    name, phone, email, vehicle,
+    startDate, endDate, pickup, driver
   };
 
-  firestore.collection("bookings").add(bookingData)
-    .then(() => {
-      localStorage.setItem("lastBooking", JSON.stringify(bookingData));
-      window.location.href = "booking-confirmation.html";
-    })
-    .catch(err => alert("Booking failed: " + err));
+  // Save ALL bookings
+  let allBookings = JSON.parse(localStorage.getItem("allBookings")) || [];
+  allBookings.push(bookingData);
+  localStorage.setItem("allBookings", JSON.stringify(allBookings));
+
+  // Save booked dates into availability
+  let availability = JSON.parse(localStorage.getItem("availability")) || {};
+  if (!availability[vehicle]) availability[vehicle] = [];
+
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+    const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    availability[vehicle].push(dateStr);
+  }
+
+  localStorage.setItem("availability", JSON.stringify(availability));
+
+  // Save last booking for confirmation page
+  localStorage.setItem("lastBooking", JSON.stringify(bookingData));
+
+  // Redirect
+  window.location.href = "booking-confirmation.html";
 });
 </script>
 
