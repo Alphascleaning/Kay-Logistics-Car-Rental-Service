@@ -26,6 +26,18 @@
     const db = firebase.firestore();
   </script>
 
+  <!-- Logout Function -->
+  <script>
+    function logoutUser() {
+      auth.signOut().then(() => {
+        localStorage.removeItem("klcrsUserRole");
+        localStorage.removeItem("klcrsUserEmail");
+        alert("You have been logged out.");
+        window.location.href = "index.html";
+      });
+    }
+  </script>
+
   <!-- Admin Link Protection -->
   <script>
     function goAdmin() {
@@ -54,6 +66,29 @@
     <a href="#" onclick="goAdmin()">Admin</a>
   </nav>
 </header>
+
+<!-- Full Login Bar -->
+<div class="login-bar" style="padding:15px; background:#eef3ff; border-bottom:1px solid #ccc;">
+  <form id="inlineLoginForm" style="display:flex; gap:10px; align-items:center;">
+    <input type="email" id="inlineEmail" placeholder="Email" required style="padding:8px; width:200px;">
+    <input type="password" id="inlinePassword" placeholder="Password" required style="padding:8px; width:200px;">
+    <button type="submit" style="padding:8px 15px; background:#0047AB; color:white; border:none;">Login</button>
+  </form>
+</div>
+
+<!-- Create Account Link -->
+<div style="padding:10px;">
+  <a href="register.html" style="color:#0047AB;">Create an account</a>
+</div>
+
+<!-- Logged-in user display -->
+<div id="userStatus" style="padding:10px; font-size:14px; color:#0047AB;"></div>
+
+<!-- Logout Button -->
+<button onclick="logoutUser()" 
+        style="padding:8px 15px; background:#0047AB; color:white; border:none; margin:10px;">
+  Logout
+</button>
 
 <h1>Our Fleet</h1>
 
