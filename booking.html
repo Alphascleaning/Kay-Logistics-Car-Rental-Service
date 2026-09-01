@@ -4,9 +4,63 @@
   <meta charset="UTF-8">
   <title>Booking – KLCRS</title>
   <link rel="stylesheet" href="assets/css/style.css">
+
+  <!-- ⭐ Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+  <!-- ⭐ Firebase Config -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+  </script>
+
+  <!-- ⭐ Booking Protection (Customers Only) -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const role = localStorage.getItem("klcrsUserRole");
+      const email = localStorage.getItem("klcrsUserEmail");
+
+      if (!role || role !== "customer") {
+        alert("Please sign up or log in as a customer to book a vehicle.");
+        window.location.href = "register.html";
+        return;
+      }
+
+      // Auto-fill email for logged-in customers
+      if (email) {
+        document.getElementById("email").value = email;
+      }
+    });
+  </script>
+
 </head>
 
 <body>
+
+<header>
+  <div class="logo">KLCRS</div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="fleet.html">Fleet</a>
+    <a href="booking.html">Booking</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="register.html">Sign Up</a>
+    <a href="#" onclick="goAdmin()">Admin</a>
+  </nav>
+</header>
 
 <h1>Complete Your Booking</h1>
 
