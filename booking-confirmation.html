@@ -6,7 +6,6 @@
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <!-- PDF Libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
@@ -19,210 +18,121 @@
       align-items: center;
       border-bottom: 3px solid #000;
     }
-
-    .header-title {
-      font-size: 26px;
-      font-weight: bold;
-      color: black;
-    }
-
-    .fleet-logo {
-      width: 180px;
-      height: auto;
-    }
-
-    .agreement-number {
-      font-size: 18px;
-      font-weight: bold;
-      margin-top: 15px;
-      color: black;
-    }
-
-    .confirmation-box {
-      border: 1px solid #ccc;
-      padding: 15px;
-      margin: 20px 0;
-      border-radius: 6px;
-      background: #fff;
-    }
-
-    .confirmation-box p {
-      font-size: 16px;
-      color: black;
-    }
-
-    .qr-box {
-      text-align: right;
-      margin-top: 30px;
-    }
-
-    .qr-code {
-      width: 120px;
-      height: auto;
-    }
-
-    .btn {
-      padding: 10px 20px;
-      background: #0047AB;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-      border-radius: 5px;
-    }
-
-    .btn:hover {
-      background: #003b8a;
-    }
+    .header-title { font-size: 26px; font-weight: bold; color: black; }
+    .fleet-logo { width: 180px; }
+    .agreement-number { font-size: 18px; font-weight: bold; margin-top: 15px; }
+    .confirmation-box { border: 1px solid #ccc; padding: 15px; margin: 20px 0; background: #fff; border-radius: 6px; }
+    .btn { padding: 10px 18px; background:#0047AB; color:white; border:none; border-radius:6px; cursor:pointer; }
   </style>
 </head>
 
 <body>
 
-  <!-- HEADER -->
-  <div class="header">
-    <div class="header-title">Kay Logistics Car Rental Service (KLCRS)</div>
-    <img src="assets/img/klcrs-fleet.png" class="fleet-logo" alt="KLCRS Fleet Badge">
-  </div>
+<div class="header">
+  <div class="header-title">Kay Logistics Car Rental Service (KLCRS)</div>
+  <img src="assets/img/klcrs-fleet.png" class="fleet-logo">
+</div>
 
-  <!-- AGREEMENT NUMBER -->
-  <div class="agreement-number">
-    Agreement Number: <span id="agreementNumber"></span>
-  </div>
+<div class="agreement-number">
+  Agreement Number: <span id="agreementNumber"></span>
+</div>
 
-  <!-- BOOKING DETAILS -->
-  <div class="confirmation-box">
-    <h2>Booking Details</h2>
+<div class="confirmation-box">
+  <h2>Booking Details</h2>
 
-    <p><strong>Name:</strong> <span id="name"></span></p>
-    <p><strong>Phone:</strong> <span id="phone"></span></p>
-    <p><strong>Email:</strong> <span id="email"></span></p>
-    <p><strong>Vehicle:</strong> <span id="vehicle"></span></p>
-    <p><strong>Location:</strong> <span id="location"></span></p>
-    <p><strong>Daily Price:</strong> <span id="dailyPrice"></span></p>
-    <p><strong>Total Price:</strong> <span id="totalPrice"></span></p>
-    <p><strong>Start Date:</strong> <span id="startDate"></span></p>
-    <p><strong>End Date:</strong> <span id="endDate"></span></p>
-    <p><strong>Pickup Location:</strong> <span id="pickup"></span></p>
-    <p><strong>Driver Option:</strong> <span id="driver"></span></p>
-  </div>
+  <p><strong>Name:</strong> <span id="name"></span></p>
+  <p><strong>Phone:</strong> <span id="phone"></span></p>
+  <p><strong>Email:</strong> <span id="email"></span></p>
+  <p><strong>Vehicle:</strong> <span id="vehicle"></span></p>
+  <p><strong>Start Date:</strong> <span id="startDate"></span></p>
+  <p><strong>End Date:</strong> <span id="endDate"></span></p>
+  <p><strong>Pickup:</strong> <span id="pickup"></span></p>
+  <p><strong>Driver:</strong> <span id="driver"></span></p>
+</div>
 
-  <!-- QR -->
-  <div class="qr-box">
-    <img src="assets/img/agreement-qr.png" class="qr-code" alt="Agreement QR Code">
-    <p>Scan QR to verify agreement.</p>
-  </div>
+<button class="btn" onclick="downloadPDF()">Download PDF</button>
 
-  <!-- PDF BUTTON -->
-  <div style="margin-top: 20px;">
-    <button class="btn" onclick="downloadPDF()">Download PDF</button>
-  </div>
+<div style="margin-top:20px;">
+  <label><strong>Reason for Cancellation:</strong></label>
+  <select id="cancelReason" style="padding:10px;">
+    <option value="">Select reason</option>
+    <option value="Change of plans">Change of plans</option>
+    <option value="Found cheaper option">Found cheaper option</option>
+    <option value="Incorrect booking details">Incorrect booking details</option>
+    <option value="Vehicle no longer needed">Vehicle no longer needed</option>
+    <option value="Emergency situation">Emergency situation</option>
+  </select>
+</div>
 
-  <!-- CANCELLATION REASON -->
-  <div style="margin-top: 20px;">
-    <label for="cancelReason"><strong>Reason for Cancellation:</strong></label>
-    <select id="cancelReason" style="padding: 10px; margin-left: 10px;">
-      <option value="">Select a reason</option>
-      <option value="Change of plans">Change of plans</option>
-      <option value="Found cheaper option">Found cheaper option</option>
-      <option value="Incorrect booking details">Incorrect booking details</option>
-      <option value="Vehicle no longer needed">Vehicle no longer needed</option>
-      <option value="Emergency situation">Emergency situation</option>
-    </select>
-  </div>
-
-  <!-- CANCEL BUTTON -->
-  <div style="margin-top: 10px;">
-    <button class="btn" onclick="cancelBooking()">Cancel Booking</button>
-  </div>
+<button class="btn" style="margin-top:10px;" onclick="cancelBooking()">Cancel Booking</button>
 
 <script>
-  // Generate agreement number
-  const today = new Date();
-  const yyyy = today.getFullYear();
-  const mm = String(today.getMonth() + 1).padStart(2, '0');
-  const dd = String(today.getDate()).padStart(2, '0');
-  const randomDigits = Math.floor(1000 + Math.random() * 9000);
-  const agreementNumber = `RA-${yyyy}-${mm}-${dd}-${randomDigits}`;
-  document.getElementById("agreementNumber").textContent = agreementNumber;
+// Agreement number
+const today = new Date();
+const yyyy = today.getFullYear();
+const mm = String(today.getMonth()+1).padStart(2,'0');
+const dd = String(today.getDate()).padStart(2,'0');
+const randomDigits = Math.floor(1000 + Math.random()*9000);
+document.getElementById("agreementNumber").textContent = `RA-${yyyy}-${mm}-${dd}-${randomDigits}`;
 
-  // Load booking data
-  const booking = JSON.parse(localStorage.getItem("lastBooking"));
-
-  document.getElementById("name").textContent = booking.name;
-  document.getElementById("phone").textContent = booking.phone;
-  document.getElementById("email").textContent = booking.email;
-  document.getElementById("vehicle").textContent = booking.vehicle;
-  document.getElementById("location").textContent = booking.location;
-  document.getElementById("dailyPrice").textContent = booking.dailyPrice;
-  document.getElementById("totalPrice").textContent = booking.totalPrice;
-  document.getElementById("startDate").textContent = booking.startDate;
-  document.getElementById("endDate").textContent = booking.endDate;
-  document.getElementById("pickup").textContent = booking.pickup;
-  document.getElementById("driver").textContent = booking.driver;
+// Load booking
+const booking = JSON.parse(localStorage.getItem("lastBooking"));
+document.getElementById("name").textContent = booking.name;
+document.getElementById("phone").textContent = booking.phone;
+document.getElementById("email").textContent = booking.email;
+document.getElementById("vehicle").textContent = booking.vehicle;
+document.getElementById("startDate").textContent = booking.startDate;
+document.getElementById("endDate").textContent = booking.endDate;
+document.getElementById("pickup").textContent = booking.pickup;
+document.getElementById("driver").textContent = booking.driver;
 </script>
 
-<!-- PDF SCRIPT -->
 <script>
 async function downloadPDF() {
   const { jsPDF } = window.jspdf;
-  const element = document.body;
-
-  const canvas = await html2canvas(element, { scale: 2 });
+  const canvas = await html2canvas(document.body, { scale:2 });
   const imgData = canvas.toDataURL("image/png");
-  const pdf = new jsPDF("p", "mm", "a4");
-
+  const pdf = new jsPDF("p","mm","a4");
   const pdfWidth = pdf.internal.pageSize.getWidth();
   const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-  pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+  pdf.addImage(imgData,"PNG",0,0,pdfWidth,pdfHeight);
   pdf.save("KLCRS_Rental_Agreement.pdf");
 }
 </script>
 
-<!-- CANCELLATION SCRIPT -->
 <script>
 function cancelBooking() {
-  const booking = JSON.parse(localStorage.getItem("lastBooking"));
-  if (!booking) return alert("No booking found.");
-
   const reason = document.getElementById("cancelReason").value;
   if (!reason) return alert("Please select a cancellation reason.");
 
   const bookingDate = new Date(booking.startDate);
   const today = new Date();
+  const diffDays = (bookingDate - today) / (1000*60*60*24);
 
-  const diffTime = bookingDate - today;
-  const diffDays = diffTime / (1000 * 60 * 60 * 24);
+  let fee = diffDays >= 1 ? 0 : 10;
 
-  let feeMessage = "";
-  let feeAmount = 0;
+  alert(`Booking cancelled.\nReason: ${reason}\nFee: €${fee}`);
 
-  if (diffDays >= 1) {
-    feeMessage = "No fee applied (within 1-day grace period).";
-    feeAmount = 0;
-  } else {
-    feeMessage = "An administrative fee of €10 will be charged.";
-    feeAmount = 10;
-  }
+  // Free booked dates
+  let availability = JSON.parse(localStorage.getItem("availability")) || {};
+  if (availability[booking.vehicle]) {
+    const start = new Date(booking.startDate);
+    const end = new Date(booking.endDate);
 
-  alert(`Your booking has been cancelled.\nReason: ${reason}\n${feeMessage}`);
-
-  // Remove last booking
-  localStorage.removeItem("lastBooking");
-
-  // Update allBookings
-  let allBookings = JSON.parse(localStorage.getItem("allBookings")) || [];
-  allBookings = allBookings.map(b => {
-    if (b.startDate === booking.startDate && b.name === booking.name) {
-      b.cancelled = true;
-      b.cancellationReason = reason;
-      b.cancellationFee = feeAmount;
+    for (let d = new Date(start); d <= end; d.setDate(d.getDate()+1)) {
+      const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+      availability[booking.vehicle] = availability[booking.vehicle].filter(date => date !== dateStr);
     }
-    return b;
-  });
+  }
+  localStorage.setItem("availability", JSON.stringify(availability));
 
+  // Remove from allBookings
+  let allBookings = JSON.parse(localStorage.getItem("allBookings")) || [];
+  allBookings = allBookings.filter(b => !(b.name === booking.name && b.startDate === booking.startDate));
   localStorage.setItem("allBookings", JSON.stringify(allBookings));
+
+  // Remove lastBooking
+  localStorage.removeItem("lastBooking");
 
   window.location.href = "index.html";
 }
@@ -230,4 +140,3 @@ function cancelBooking() {
 
 </body>
 </html>
-
