@@ -22,7 +22,12 @@
   <input type="email" id="email" required>
 
   <label>Vehicle:</label>
-  <input type="text" id="vehicle" readonly>
+  <select id="vehicle" required>
+    <option value="">Select Vehicle</option>
+    <option value="ML 320">Mercedes-Benz ML 320</option>
+    <option value="Prado">Toyota Land Cruiser Prado</option>
+    <option value="X-Trail">Nissan X-Trail</option>
+  </select>
 
   <label>Start Date:</label>
   <input type="date" id="startDate" required>
@@ -45,9 +50,19 @@
 
 <script>
 // Auto-fill selected vehicle + date from fleet page
-document.getElementById("vehicle").value = localStorage.getItem("selectedVehicle") || "";
-document.getElementById("startDate").value = localStorage.getItem("selectedDate") || "";
+const selectedVehicle = localStorage.getItem("selectedVehicle");
+const selectedDate = localStorage.getItem("selectedDate");
 
+if (selectedVehicle) {
+  document.getElementById("vehicle").value = selectedVehicle;
+}
+
+if (selectedDate) {
+  document.getElementById("startDate").value = selectedDate;
+}
+</script>
+
+<script>
 // Submit booking
 document.getElementById("bookingForm").addEventListener("submit", function(e) {
   e.preventDefault();
