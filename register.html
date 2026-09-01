@@ -30,25 +30,40 @@
 
 <body>
 
-<h1>Create Your KLCRS Account</h1>
+<header>
+  <div class="logo">KLCRS</div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="fleet.html">Fleet</a>
+    <a href="booking.html">Booking</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="admin.html">Admin</a>
+  </nav>
+</header>
 
-<form id="registerForm">
+<section class="section" style="max-width:500px; margin:auto;">
+  <h1>Create Your KLCRS Account</h1>
 
-    <label>Email:</label>
-    <input type="email" id="regEmail" required>
+  <form id="registerForm" style="display:flex; flex-direction:column; gap:15px;">
 
-    <label>Password:</label>
-    <input type="password" id="regPassword" required>
+      <label>Email:</label>
+      <input type="email" id="regEmail" required>
 
-    <label>Select Role:</label>
-    <select id="regRole" required>
-        <option value="customer">Customer</option>
-        <option value="admin">Admin / Worker</option>
-    </select>
+      <label>Password:</label>
+      <input type="password" id="regPassword" required>
 
-    <button type="submit">Create Account</button>
+      <label>Select Role:</label>
+      <select id="regRole" required>
+          <option value="">Select Role</option>
+          <option value="customer">Customer</option>
+          <option value="worker">Worker</option>
+          <option value="admin">Administrator</option>
+      </select>
 
-</form>
+      <button type="submit" class="btn-primary">Create Account</button>
+  </form>
+</section>
 
 <script>
 document.getElementById("registerForm").addEventListener("submit", async (e) => {
@@ -69,10 +84,18 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
             role: role
         });
 
+        // Save role locally
+        localStorage.setItem("klcrsUserEmail", email);
+        localStorage.setItem("klcrsUserRole", role);
+
         alert("Account created successfully as: " + role);
 
-        // Redirect to login page
-        window.location.href = "login.html";
+        // Redirect based on role
+        if (role === "admin" || role === "worker") {
+            window.location.href = "admin.html";
+        } else {
+            window.location.href = "booking.html";
+        }
 
     } catch (err) {
         alert("Registration error: " + err.message);
@@ -82,4 +105,3 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
 
 </body>
 </html>
-
