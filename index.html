@@ -10,21 +10,8 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
-  <!-- ⭐ Firebase Config -->
-  <script>
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
-  </script>
+  <!-- ⭐ Global Firebase Config -->
+  <script src="assets/ja/firebase.js"></script>
 
   <!-- ⭐ Inline Login Logic -->
   <script>
@@ -39,10 +26,10 @@
           const password = document.getElementById("inlinePassword").value;
 
           try {
-            const userCred = await auth.signInWithEmailAndPassword(email, password);
+            const userCred = await firebase.auth().signInWithEmailAndPassword(email, password);
             const uid = userCred.user.uid;
 
-            const doc = await db.collection("users").doc(uid).get();
+            const doc = await firebase.firestore().collection("users").doc(uid).get();
             const data = doc.data();
 
             localStorage.setItem("klcrsUserEmail", data.email);
@@ -50,7 +37,7 @@
 
             alert("Logged in as " + data.role);
 
-            showLoggedInUser(); // update display
+            showLoggedInUser();
           } catch (err) {
             alert("Login error: " + err.message);
           }
@@ -59,7 +46,7 @@
     });
   </script>
 
-  <!-- ⭐ Logged-in user display function -->
+  <!-- ⭐ Logged-in user display -->
   <script>
     function showLoggedInUser() {
       const email = localStorage.getItem("klcrsUserEmail");
@@ -80,7 +67,7 @@
     function goAdmin() {
       const role = localStorage.getItem("klcrsUserRole");
 
-      if (role !== "admin") {
+      if (role !== "admin" && role !== "worker") {
         alert("Access denied. Admin / Worker only.");
         return;
       }
@@ -102,18 +89,15 @@
     <a href="about.html">About</a>
     <a href="contact.html">Contact</a>
     <a href="#" onclick="goAdmin()">Admin</a>
-   <a href="register.html">Sign Up</a>
- 
+    <a href="register.html">Sign Up</a>
   </nav>
 </header>
 
 <!-- ⭐ Login Bar -->
 <div class="login-bar" style="padding:15px; background:#eef3ff; border-bottom:1px solid #ccc;">
   <form id="inlineLoginForm" style="display:flex; gap:10px; align-items:center;">
-    <input type="email" id="inlineEmail" placeholder="Email" required 
-           style="padding:8px; width:200px;">
-    <input type="password" id="inlinePassword" placeholder="Password" required 
-           style="padding:8px; width:200px;">
+    <input type="email" id="inlineEmail" placeholder="Email" required style="padding:8px; width:200px;">
+    <input type="password" id="inlinePassword" placeholder="Password" required style="padding:8px; width:200px;">
     <button type="submit" style="padding:8px 15px; background:#0047AB; color:white; border:none;">
       Login
     </button>
@@ -165,3 +149,6 @@
 
 </body>
 </html>
+
+        
+  
