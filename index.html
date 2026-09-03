@@ -2,153 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Kay Logistics Car Rental Service – KLCRS</title>
+  <title>KLCRS – Home</title>
   <link rel="stylesheet" href="assets/css/style.css">
-
-  <!-- ⭐ Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-
-  <!-- ⭐ Global Firebase Config -->
-  <script src="assets/ja/firebase.js"></script>
-
-  <!-- ⭐ Inline Login Logic -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const form = document.getElementById("inlineLoginForm");
-
-      if (form) {
-        form.addEventListener("submit", async (e) => {
-          e.preventDefault();
-
-          const email = document.getElementById("inlineEmail").value;
-          const password = document.getElementById("inlinePassword").value;
-
-          try {
-            const userCred = await firebase.auth().signInWithEmailAndPassword(email, password);
-            const uid = userCred.user.uid;
-
-            const doc = await firebase.firestore().collection("users").doc(uid).get();
-            const data = doc.data();
-
-            localStorage.setItem("klcrsUserEmail", data.email);
-            localStorage.setItem("klcrsUserRole", data.role);
-
-            alert("Logged in as " + data.role);
-
-            showLoggedInUser();
-          } catch (err) {
-            alert("Login error: " + err.message);
-          }
-        });
-      }
-    });
-  </script>
-
-  <!-- ⭐ Logged-in user display -->
-  <script>
-    function showLoggedInUser() {
-      const email = localStorage.getItem("klcrsUserEmail");
-      const role = localStorage.getItem("klcrsUserRole");
-
-      if (!email || !role) {
-        document.getElementById("userStatus").innerHTML = "Not logged in";
-        return;
-      }
-
-      document.getElementById("userStatus").innerHTML =
-        `Logged in as: <strong>${email}</strong> (${role})`;
-    }
-  </script>
-
-  <!-- ⭐ Admin Link Protection -->
-  <script>
-    function goAdmin() {
-      const role = localStorage.getItem("klcrsUserRole");
-
-      if (role !== "admin" && role !== "worker") {
-        alert("Access denied. Admin / Worker only.");
-        return;
-      }
-
-      window.location.href = "admin.html";
-    }
-  </script>
-
 </head>
-
 <body>
-
 <header>
-  <div class="logo">KLCRS</div>
   <nav>
     <a href="index.html">Home</a>
-    <a href="fleet.html">Fleet</a>
     <a href="booking.html">Booking</a>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-    <a href="#" onclick="goAdmin()">Admin</a>
+    <a href="login.html">Login</a>
     <a href="register.html">Sign Up</a>
+    <a href="admin.html">Admin</a>
+    <a href="worker.html">Worker</a>
+    <a href="customer.html">Customer</a>
   </nav>
 </header>
 
-<!-- ⭐ Login Bar -->
-<div class="login-bar" style="padding:15px; background:#eef3ff; border-bottom:1px solid #ccc;">
-  <form id="inlineLoginForm" style="display:flex; gap:10px; align-items:center;">
-    <input type="email" id="inlineEmail" placeholder="Email" required style="padding:8px; width:200px;">
-    <input type="password" id="inlinePassword" placeholder="Password" required style="padding:8px; width:200px;">
-    <button type="submit" style="padding:8px 15px; background:#0047AB; color:white; border:none;">
-      Login
-    </button>
-  </form>
-</div>
-
-<!-- ⭐ Logged-in user display -->
-<div id="userStatus" style="padding:10px; font-size:14px; color:#0047AB;"></div>
-
-<section class="hero">
-  <h1>Kay Logistics Car Rental Service</h1>
-  <p>
-    Reliable jeep and car rental in Sierra Leone. From Freetown to Waterloo and upland provinces,
-    KLCRS offers safe, tracked vehicles with clear pricing and professional service.
-  </p>
-  <p>
-    Inland (Freetown–Waterloo): <strong>€25/day</strong> – Upland/provinces: <strong>€56/day</strong> (fuel not included).
-    Vehicles are provided with reserve fuel and must be returned with the same quantity.
-  </p>
-  <a href="booking.html" class="btn-primary">Book Now</a>
-</section>
-
-<section class="section">
-  <h2>Why Choose KLCRS?</h2>
-  <ul>
-    <li><strong>Tracked vehicles:</strong> All cars are equipped with GPS trackers.</li>
-    <li><strong>Clear fuel policy:</strong> Reserve fuel included at start; return with same quantity.</li>
-    <li><strong>Flexible routes:</strong> Inland city routes and upland/province trips.</li>
-    <li><strong>Professional standards:</strong> Own driver = own responsibility for damages.</li>
-  </ul>
-</section>
-
-<section class="section">
-  <h2>Contact & Location</h2>
-  <p><strong>Address:</strong> 3 Peacock Farm, Wellington, Freetown, Sierra Leone</p>
-  <p><strong>Tel:</strong> +23276699658</p>
-  <p><strong>Email:</strong> alpha_kamara@hotmail.de</p>
-  <p><strong>Website:</strong> www.klcrs.de</p>
-</section>
-
-<footer>
-  &copy; Kay Logistics Car Rental Service (KLCRS) – Sierra Leone
-</footer>
-
-<!-- ⭐ Activate logged-in user display -->
-<script>
-  showLoggedInUser();
-</script>
-
+<h1>Kay Logistics Car Rental Service</h1>
+<p>Welcome to KLCRS.</p>
 </body>
 </html>
-
-        
-  
