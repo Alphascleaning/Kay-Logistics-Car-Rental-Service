@@ -11,23 +11,9 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
   <!-- ⭐ Firebase Config -->
-  <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyBTGRBvq-QQUcSsufDadxJQVeyB5E0_UME",
-  authDomain: "klcrs-a7054.firebaseapp.com",
-  projectId: "klcrs-a7054",
-  storageBucket: "klcrs-a7054.appspot.com",
-  messagingSenderId: "972485288867",
-  appId: "1:972485288867:web:8616aba476cfd4997fb016"
-};
+  <script src="assets/ja/firebase.js"></script>
 
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-</script>
-
-
-  <!-- ⭐ Inline Login Logic -->
+<!-- ⭐ Inline Login Logic -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const form = document.getElementById("inlineLoginForm");
@@ -81,12 +67,11 @@ const db = firebase.firestore();
     function goAdmin() {
       const role = localStorage.getItem("klcrsUserRole");
 
-      if (role !== "admin") {
-        alert("Access denied. Admin / Worker only.");
-        return;
-      }
-
-      window.location.href = "admin.html";
+      if (role !== "admin" && role !== "worker") {
+  alert("Access denied. Admin / Worker only.");
+  return;
+}
+ window.location.href = "admin.html";
     }
   </script>
 
