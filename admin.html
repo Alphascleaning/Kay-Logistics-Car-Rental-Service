@@ -9,6 +9,17 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
   <script src="assets/firebase.js"></script>
+  
+  <!-- Logout Script (paste here) -->
+<script>
+function logoutUser() {
+  auth.signOut();
+  localStorage.removeItem("klcrsUserRole");
+  localStorage.removeItem("klcrsUserEmail");
+  alert("You have been logged out.");
+  window.location.href = "index.html";
+}
+</script>
 </head>
 <body>
 <header>
