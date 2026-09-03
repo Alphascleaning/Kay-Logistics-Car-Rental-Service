@@ -46,34 +46,45 @@
 
 <script>
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const email = document.getElementById("logEmail").value;
-    const password = document.getElementById("logPassword").value;
+  const email = document.getElementById("loginEmail").value;
+  const password = document.getElementById("loginPassword").value;
 
-    try {
-        // Login user
-        const userCred = await auth.signInWithEmailAndPassword(email, password);
-        const uid = userCred.user.uid;
+  try {
+    // Sign in user
+    const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+    const user = userCredential.user;
 
-        // Fetch role from Firestore
-        const doc = await db.collection("users").doc(uid).get();
-        const data = doc.data();
+    // Load user role from Firestore
+    const docRef = firestore.collection("users").doc(user.uid);
+    const docSnap = await docRef.get();
 
-        // Store role + email locally
-        localStorage.setItem("klcrsUserRole", data.role);
-        localStorage.setItem("klcrsUserEmail", data.email);
-
-        alert("Logged in as " + data.role);
-
-        // Redirect to homepage
-        window.location.href = "index.html";
-
-    } catch (err) {
-        alert("Login error: " + err.message);
+    if (!docSnap.exists) {
+      alert("Error: User record not found.");
+      return;
     }
+
+    const userData = docSnap.data();
+    const role = userData.role; // admin / worker / customer
+
+    // Save role + email to localStorage
+    localStorage.setItem("klcrsUserRole", role);
+    localStorage.setItem("klcrsUserEmail", email);
+
+    // Redirect based on role
+    if (role === "admin" || role === "worker") {
+      window.location.href = "admin.html";
+    } else {
+      window.location.href = "index.html";
+    }
+
+  } catch (error) {
+    alert("Login error: " + error.message);
+  }
 });
 </script>
+
 
 </body>
 </html>
