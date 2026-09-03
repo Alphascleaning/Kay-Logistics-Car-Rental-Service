@@ -1,96 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Register – KLCRS</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+  <meta charset="UTF-8">
+  <title>KLCRS – Register</title>
 
-    <!-- ⭐ Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-
-    <!-- ⭐ Global Firebase Config (MUST come after SDKs) -->
-   <script src="assets/firebase.js"></script>
-
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="assets/firebase.js"></script>
 </head>
-
 <body>
-
 <header>
-  <div class="logo">KLCRS</div>
   <nav>
     <a href="index.html">Home</a>
-    <a href="fleet.html">Fleet</a>
-    <a href="booking.html">Booking</a>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-    <a href="admin.html">Admin</a>
+    <a href="login.html">Login</a>
   </nav>
 </header>
 
-<section class="section" style="max-width:500px; margin:auto;">
-  <h1>Create Your KLCRS Account</h1>
+<h1>Create Account</h1>
 
-  <form id="registerForm" style="display:flex; flex-direction:column; gap:15px;">
-
-      <label>Email:</label>
-      <input type="email" id="regEmail" required>
-
-      <label>Password:</label>
-      <input type="password" id="regPassword" required>
-
-      <label>Select Role:</label>
-      <select id="regRole" required>
-          <option value="">Select Role</option>
-          <option value="customer">Customer</option>
-          <option value="worker">Worker</option>
-          <option value="admin">Administrator</option>
-      </select>
-
-      <button type="submit" class="btn-primary">Create Account</button>
-  </form>
-</section>
+<form id="registerForm">
+  <input type="email" id="regEmail" placeholder="Email" required>
+  <input type="password" id="regPassword" placeholder="Password" required>
+  <select id="regRole" required>
+    <option value="">Select role</option>
+    <option value="customer">Customer</option>
+    <option value="worker">Worker</option>
+    <option value="admin">Admin</option>
+  </select>
+  <button type="submit">Sign Up</button>
+</form>
 
 <script>
 document.getElementById("registerForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
+  e.preventDefault();
+  const email = document.getElementById("regEmail").value;
+  const password = document.getElementById("regPassword").value;
+  const role = document.getElementById("regRole").value;
 
-    const email = document.getElementById("regEmail").value;
-    const password = document.getElementById("regPassword").value;
-    const role = document.getElementById("regRole").value;
+  try {
+    const cred = await auth.createUserWithEmailAndPassword(email, password);
+    const user = cred.user;
 
-    try {
-        // ⭐ Create user in Firebase Auth
-        const userCred = await firebase.auth().createUserWithEmailAndPassword(email, password);
-        const uid = userCred.user.uid;
+    await firestore.collection("users").doc(user.uid).set({
+      email,
+      role,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
 
-        // ⭐ Save role in Firestore
-        await firebase.firestore().collection("users").doc(uid).set({
-            email: email,
-            role: role
-        });
-
-        // ⭐ Save role locally
-        localStorage.setItem("klcrsUserEmail", email);
-        localStorage.setItem("klcrsUserRole", role);
-
-        alert("Account created successfully as: " + role);
-
-        // ⭐ Redirect based on role
-        if (role === "admin" || role === "worker") {
-            window.location.href = "admin.html";
-        } else {
-            window.location.href = "booking.html";
-        }
-
-    } catch (err) {
-        alert("Registration error: " + err.message);
-    }
+    alert("Account created. You can now log in.");
+    window.location.href = "login.html";
+  } catch (err) {
+    alert("Registration error: " + err.message);
+  }
 });
 </script>
-
 </body>
 </html>
 
-  
