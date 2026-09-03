@@ -5,37 +5,37 @@
   <title>Admin Dashboard – KLCRS</title>
   <link rel="stylesheet" href="assets/css/style.css">
 
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
-  <!-- Firebase Config -->
- <script src="assets/ja/firebase.js"></script>
- 
-  <!-- Logout Function -->
-  <script>
-    function logoutUser() {
-     firebase.auth().signOut()
-      localStorage.removeItem("klcrsUserRole");
-        localStorage.removeItem("klcrsUserEmail");
-        alert("You have been logged out.");
-        window.location.href = "index.html";
-      }
-    }
-  </script>
+<!-- Firebase Config -->
+<script src="assets/firebase.js"></script>
 
-  <!-- Admin Protection -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const role = localStorage.getItem("klcrsUserRole");
+<!-- Logout Function -->
+<script>
+function logoutUser() {
+  firebase.auth().signOut();
+  localStorage.removeItem("klcrsUserRole");
+  localStorage.removeItem("klcrsUserEmail");
+  alert("You have been logged out.");
+  window.location.href = "index.html";
+}
+</script>
 
-      if (role !== "admin" && role !== "worker") {
-        alert("Access denied. Admin / Worker only.");
-        window.location.href = "index.html";
-      }
-    });
-  </script>
+<!-- Admin Protection -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const role = localStorage.getItem("klcrsUserRole");
+
+  if (role !== "admin" && role !== "worker") {
+    alert("Access denied. Admin / Worker only.");
+    window.location.href = "index.html";
+  }
+});
+</script>
+
 
 </head>
 
