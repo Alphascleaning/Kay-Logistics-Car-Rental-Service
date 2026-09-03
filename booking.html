@@ -2,195 +2,63 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Booking – KLCRS</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+  <title>KLCRS – Booking</title>
 
-  <!-- Firebase SDKs -->
+  <link rel="stylesheet" href="assets/css/style.css">
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-
-  <!-- Firebase Config -->
- <script src="assets/ja/firebase.js"></script>
-  
-<!-- ⭐ Admin Link Protection -->
-<script>
-function goAdmin() {
-  const role = localStorage.getItem("klcrsUserRole");
-
-  if (role !== "admin" && role !== "worker") {
-    alert("Access denied. Admin / Worker only.");
-    return;
-  }
-
-  window.location.href = "admin.html";
-}
-</script>
-  
-  <!-- Logout Function -->
-  <script>
-    function logoutUser() {
-      auth.signOut().then(() => {
-        localStorage.removeItem("klcrsUserRole");
-        localStorage.removeItem("klcrsUserEmail");
-        alert("You have been logged out.");
-        window.location.href = "index.html";
-      });
-    }
-  </script>
-
-  <!-- Booking Protection -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const role = localStorage.getItem("klcrsUserRole");
-      const email = localStorage.getItem("klcrsUserEmail");
-
-      if (!role || role !== "customer") {
-        alert("Please sign up or log in as a customer to book a vehicle.");
-        window.location.href = "register.html";
-        return;
-      }
-
-      if (email) {
-        document.getElementById("email").value = email;
-      }
-    });
-  </script>
-
+  <script src="assets/firebase.js"></script>
 </head>
-
 <body>
-
 <header>
-  <div class="logo">KLCRS</div>
   <nav>
     <a href="index.html">Home</a>
-    <a href="fleet.html">Fleet</a>
-    <a href="booking.html">Booking</a>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-    <a href="register.html">Sign Up</a>
-    <a href="#" onclick="goAdmin()">Admin</a>
+    <a href="login.html">Login</a>
   </nav>
 </header>
 
-<!-- Full Login Bar -->
-<div class="login-bar" style="padding:15px; background:#eef3ff; border-bottom:1px solid #ccc;">
-  <form id="inlineLoginForm" style="display:flex; gap:10px; align-items:center;">
-    <input type="email" id="inlineEmail" placeholder="Email" required style="padding:8px; width:200px;">
-    <input type="password" id="inlinePassword" placeholder="Password" required style="padding:8px; width:200px;">
-    <button type="submit" style="padding:8px 15px; background:#0047AB; color:white; border:none;">Login</button>
-  </form>
-</div>
-
-<!-- Create Account Link -->
-<div style="padding:10px;">
-  <a href="register.html" style="color:#0047AB;">Create an account</a>
-</div>
-
-<!-- Logged-in user display -->
-<div id="userStatus" style="padding:10px; font-size:14px; color:#0047AB;"></div>
-
-<!-- Logout Button -->
-<button onclick="logoutUser()" style="padding:8px 15px; background:#0047AB; color:white; border:none; margin:10px;">
-  Logout
-</button>
-
-<h1>Complete Your Booking</h1>
+<h1>Make a Booking</h1>
 
 <form id="bookingForm">
-
-  <label>Name:</label>
-  <input type="text" id="name" required>
-
-  <label>Phone:</label>
-  <input type="text" id="phone" required>
-
-  <label>Email:</label>
-  <input type="email" id="email" required>
-
-  <label>Vehicle:</label>
-  <select id="vehicle" required>
-    <option value="">Select Vehicle</option>
-    <option value="ML 320">Mercedes-Benz ML 320</option>
-    <option value="Prado">Toyota Land Cruiser Prado</option>
-    <option value="X-Trail">Nissan X-Trail</option>
-  </select>
-
-  <label>Start Date:</label>
-  <input type="date" id="startDate" required>
-
-  <label>End Date:</label>
-  <input type="date" id="endDate" required>
-
-  <label>Pickup Location:</label>
-  <input type="text" id="pickup" required>
-
-  <label>Driver Option:</label>
-  <select id="driver">
-    <option value="Self Drive">Self Drive</option>
-    <option value="With Driver">With Driver</option>
-  </select>
-
-  <button type="submit">Confirm Booking</button>
-
+  <input type="text" id="bkName" placeholder="Your name" required>
+  <input type="email" id="bkEmail" placeholder="Your email" required>
+  <input type="text" id="bkVehicle" placeholder="Vehicle" required>
+  <input type="date" id="bkStart" required>
+  <input type="date" id="bkEnd" required>
+  <button type="submit">Submit Booking</button>
 </form>
 
 <script>
-// Auto-fill selected vehicle + date from fleet page
-const selectedVehicle = localStorage.getItem("selectedVehicle");
-const selectedDate = localStorage.getItem("selectedDate");
-
-if (selectedVehicle) {
-  document.getElementById("vehicle").value = selectedVehicle;
-}
-
-if (selectedDate) {
-  document.getElementById("startDate").value = selectedDate;
-}
-</script>
-
-<script>
-// Submit booking
-document.getElementById("bookingForm").addEventListener("submit", function(e) {
+document.getElementById("bookingForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const name = document.getElementById("name").value;
-  const phone = document.getElementById("phone").value;
-  const email = document.getElementById("email").value;
-  const vehicle = document.getElementById("vehicle").value;
-  const startDate = document.getElementById("startDate").value;
-  const endDate = document.getElementById("endDate").value;
-  const pickup = document.getElementById("pickup").value;
-  const driver = document.getElementById("driver").value;
+  const customerName = document.getElementById("bkName").value;
+  const customerEmail = document.getElementById("bkEmail").value;
+  const vehicle = document.getElementById("bkVehicle").value;
+  const startDate = document.getElementById("bkStart").value;
+  const endDate = document.getElementById("bkEnd").value;
 
-  const bookingData = {
-    name, phone, email, vehicle,
-    startDate, endDate, pickup, driver
-  };
+  try {
+    await firestore.collection("bookings").add({
+      customerName,
+      customerEmail,
+      vehicle,
+      startDate,
+      endDate,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
 
-  let allBookings = JSON.parse(localStorage.getItem("allBookings")) || [];
-  allBookings.push(bookingData);
-  localStorage.setItem("allBookings", JSON.stringify(allBookings));
-
-  let availability = JSON.parse(localStorage.getItem("availability")) || {};
-  if (!availability[vehicle]) availability[vehicle] = [];
-
-  const start = new Date(startDate);
-  const end = new Date(endDate);
-
-  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-    const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-    availability[vehicle].push(dateStr);
+    alert("Booking submitted.");
+    window.location.href = "index.html";
+  } catch (err) {
+    alert("Booking error: " + err.message);
   }
-
-  localStorage.setItem("availability", JSON.stringify(availability));
-
-  localStorage.setItem("lastBooking", JSON.stringify(bookingData));
-
-  window.location.href = "booking-confirmation.html";
 });
 </script>
-
 </body>
 </html>
+
+  
+
+  
