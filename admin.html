@@ -2,128 +2,70 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Admin Dashboard – KLCRS</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+  <title>KLCRS – Admin Dashboard</title>
 
-  <!-- Firebase SDKs -->
+  <link rel="stylesheet" href="assets/css/style.css">
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-
-  <!-- Firebase Config (correct path) -->
   <script src="assets/firebase.js"></script>
-
-  <!-- Logout Function (fixed braces) -->
-  <script>
-    function logoutUser() {
-      firebase.auth().signOut();
-      localStorage.removeItem("klcrsUserRole");
-      localStorage.removeItem("klcrsUserEmail");
-      alert("You have been logged out.");
-      window.location.href = "index.html";
-    }
-  </script>
-
-  <!-- Admin Protection (correct role check) -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const role = localStorage.getItem("klcrsUserRole");
-
-      // Only allow admin or worker
-      if (role !== "admin" && role !== "worker") {
-        alert("Access denied. Admin / Worker only.");
-        window.location.href = "index.html";
-      }
-    });
-  </script>
-
 </head>
-
 <body>
-
 <header>
-  <div class="logo">KLCRS</div>
   <nav>
     <a href="index.html">Home</a>
-    <a href="fleet.html">Fleet</a>
-    <a href="booking.html">Booking</a>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-    <a href="register.html">Sign Up</a>
-    <a href="admin.html">Admin</a>
+    <button onclick="logoutUser()">Logout</button>
   </nav>
 </header>
 
-<!-- Full Login Bar -->
-<div class="login-bar" style="padding:15px; background:#eef3ff; border-bottom:1px solid #ccc;">
-  <form id="inlineLoginForm" style="display:flex; gap:10px; align-items:center;">
-    <input type="email" id="inlineEmail" placeholder="Email" required style="padding:8px; width:200px;">
-    <input type="password" id="inlinePassword" placeholder="Password" required style="padding:8px; width:200px;">
-    <button type="submit" style="padding:8px 15px; background:#0047AB; color:white; border:none;">Login</button>
-  </form>
-</div>
-
-<!-- Create Account Link -->
-<div style="padding:10px;">
-  <a href="register.html" style="color:#0047AB;">Create an account</a>
-</div>
-
-<!-- Logged-in user display -->
-<div id="userStatus" style="padding:10px; font-size:14px; color:#0047AB;"></div>
-
-<!-- Logout Button -->
-<button onclick="logoutUser()" 
-        style="padding:8px 15px; background:#0047AB; color:white; border:none; margin:10px;">
-  Logout
-</button>
-
 <h1>Admin Dashboard</h1>
+<p>Admin-only area.</p>
 
-<section class="admin-section">
-
-  <h2>All Bookings</h2>
-  <table id="bookingTable" border="1" cellpadding="10" style="width:100%; border-collapse:collapse;">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Phone</th>
-        <th>Email</th>
-        <th>Vehicle</th>
-        <th>Start</th>
-        <th>End</th>
-        <th>Pickup</th>
-        <th>Driver</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-
-</section>
+<table id="bookingTable" border="1">
+  <thead>
+    <tr>
+      <th>Customer</th>
+      <th>Email</th>
+      <th>Vehicle</th>
+      <th>Start</th>
+      <th>End</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
 
 <script>
-// Load all bookings
-document.addEventListener("DOMContentLoaded", () => {
-  const allBookings = JSON.parse(localStorage.getItem("allBookings")) || [];
-  const tableBody = document.querySelector("#bookingTable tbody");
+// role protection
+document.addEventListener("DOMContentLoaded", async () => {
+  const role = localStorage.getItem("klcrsUserRole");
+  if (role !== "admin") {
+    alert("Access denied. Admin only.");
+    window.location.href = "login.html";
+    return;
+  }
 
-  allBookings.forEach(b => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${b.name}</td>
-      <td>${b.phone}</td>
-      <td>${b.email}</td>
-      <td>${b.vehicle}</td>
-      <td>${b.startDate}</td>
-      <td>${b.endDate}</td>
-      <td>${b.pickup}</td>
-      <td>${b.driver}</td>
+  const tbody = document.querySelector("#bookingTable tbody");
+  const snap = await firestore.collection("bookings").orderBy("createdAt", "desc").get();
+  snap.forEach(doc => {
+    const b = doc.data();
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${b.customerName || ""}</td>
+      <td>${b.customerEmail || ""}</td>
+      <td>${b.vehicle || ""}</td>
+      <td>${b.startDate || ""}</td>
+      <td>${b.endDate || ""}</td>
     `;
-    tableBody.appendChild(row);
+    tbody.appendChild(tr);
   });
 });
-</script>
 
+function logoutUser() {
+  auth.signOut();
+  localStorage.clear();
+  alert("Logged out.");
+  window.location.href = "index.html";
+}
+</script>
 </body>
 </html>
-
-
