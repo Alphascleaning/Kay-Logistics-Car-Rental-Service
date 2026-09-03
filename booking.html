@@ -12,7 +12,21 @@
 
   <!-- Firebase Config -->
  <script src="assets/ja/firebase.js"></script>
+  
+<!-- ⭐ Admin Link Protection -->
+<script>
+function goAdmin() {
+  const role = localStorage.getItem("klcrsUserRole");
 
+  if (role !== "admin" && role !== "worker") {
+    alert("Access denied. Admin / Worker only.");
+    return;
+  }
+
+  window.location.href = "admin.html";
+}
+</script>
+  
   <!-- Logout Function -->
   <script>
     function logoutUser() {
