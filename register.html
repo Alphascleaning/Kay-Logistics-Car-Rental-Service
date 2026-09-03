@@ -10,9 +10,8 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
-  <!-- ⭐ Firebase Config -->
-<script src="assets/ja/firebase.js"></script>
-
+    <!-- ⭐ Global Firebase Config (MUST come after SDKs) -->
+    <script src="assets/ja/firebase.js"></script>
 </head>
 
 <body>
@@ -61,23 +60,23 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
     const role = document.getElementById("regRole").value;
 
     try {
-        // Create user in Firebase Auth
-     const userCred = await firebase.auth().createUserWithEmailAndPassword(email, password);
-     const uid = userCred.user.uid;
+        // ⭐ Create user in Firebase Auth
+        const userCred = await firebase.auth().createUserWithEmailAndPassword(email, password);
+        const uid = userCred.user.uid;
 
-        // Save role in Firestore
-await firebase.firestore().collection("users").doc(uid).set({
-         email: email,
+        // ⭐ Save role in Firestore
+        await firebase.firestore().collection("users").doc(uid).set({
+            email: email,
             role: role
         });
 
-        // Save role locally
+        // ⭐ Save role locally
         localStorage.setItem("klcrsUserEmail", email);
         localStorage.setItem("klcrsUserRole", role);
 
         alert("Account created successfully as: " + role);
 
-        // Redirect based on role
+        // ⭐ Redirect based on role
         if (role === "admin" || role === "worker") {
             window.location.href = "admin.html";
         } else {
@@ -92,3 +91,5 @@ await firebase.firestore().collection("users").doc(uid).set({
 
 </body>
 </html>
+
+  
