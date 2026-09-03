@@ -1,1 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>KLCRS – Customer Dashboard">
+
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+  <!-- Firebase Config -->
+  <script src="assets/firebase.js"></script>
+</head>
+
+<body>
+
+<header>
+  <nav>
+    <a href="index.html">Home</a>
+    <button onclick="logoutUser()">Logout</button>
+  </nav>
+</header>
+
+<h1>Customer Dashboard</h1>
+<p>Your bookings:</p>
+
+<table id="bookingTable" border="1">
+  <thead>
+    <tr>
+      <th>Vehicle</th>
+      <th>Start</th>
+      <th>End</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<script>
+// Role protection
+document.addEventListener("DOMContentLoaded", async () => {
+  const role = localStorage.getItem("klcrsUserRole");
+  const email = localStorage.getItem("klcrsUserEmail");
+
+  if (!role || !email) {
+    alert("Access denied. Please log in.");
+    window.location.href = "login.html";
+    return;
+  }
+
+  // Load bookings for this customer
+  const tbody = document.querySelector("#bookingTable tbody");
+  const snap = await firestore.collection("bookings")
+    .where("customerEmail", "==", email)
+    .orderBy("createdAt", "desc")
+    .get();
+
+  snap.forEach(doc => {
+    const b = doc.data();
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${b.vehicle || ""}</td>
+      <td>${b.startDate || ""}</td>
+      <td>${b.endDate || ""}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+});
+
+// Logout
+function logoutUser() {
+  auth.signOut();
+  localStorage.clear();
+  alert("Logged out.");
+  window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>
 
